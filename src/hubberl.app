@@ -1,3 +1,6 @@
+%% @author Leandro Silva <leandrodoze@gmail.com>
+%% @copyright 2009 Leandro Silva.
+
 {application, hubberl,
  [{description, "hubberl"},
   {vsn, "0.01"},

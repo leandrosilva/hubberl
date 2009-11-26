@@ -1,5 +1,5 @@
-%% @author author <author@example.com>
-%% @copyright YYYY author.
+%% @author Leandro Silva <leandrodoze@gmail.com>
+%% @copyright 2009 Leandro Silva.
 
 %% @doc Supervisor for the hubberl application.
 
