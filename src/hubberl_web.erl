@@ -25,13 +25,26 @@ loop(Req, DocRoot) ->
 		io:format(">> Path = ~s~n", [Path]),
     case Req:get(method) of
         Method when Method =:= 'GET'; Method =:= 'HEAD' ->
-						io:format("   Method = GET~n"),
+						io:format("   Method = ~w~n", [Method]),
             case Path of
                 _ ->
+										io:format("Path: ~s, DocRoot: ~s~n", [Path, DocRoot]),
                     Req:serve_file(Path, DocRoot)
             end;
         'POST' ->
 						io:format("   Method = POST~n"),
+            case Path of
+                _ ->
+                    Req:not_found()
+            end;
+        'PUT' ->
+						io:format("   Method = PUT~n"),
+            case Path of
+                _ ->
+                    Req:not_found()
+            end;
+        'DELETE' ->
+						io:format("   Method = DELETE~n"),
             case Path of
                 _ ->
                     Req:not_found()
