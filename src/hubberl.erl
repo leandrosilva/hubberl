@@ -1,10 +1,10 @@
 %% @author Leandro Silva <leandrodoze@gmail.com>
 %% @copyright 2009 Leandro Silva.
 
-%% @doc TEMPLATE.
+%% @doc Startup for hubberl application.
 
 -module(hubberl).
--author('author <author@example.com>').
+-author('Leandro Silva <leandrodoze@gmail.com>').
 -export([start/0, stop/0]).
 
 ensure_started(App) ->

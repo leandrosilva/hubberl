@@ -9,6 +9,8 @@
     hubberl_app,
     hubberl_sup,
     hubberl_web,
+		hubberl_web_adm,
+		hubberl_web_client,
     hubberl_deps
   ]},
   {registered, []},

@@ -4,7 +4,7 @@
 %% @doc Supervisor for the hubberl application.
 
 -module(hubberl_sup).
--author('author <author@example.com>').
+-author('Leandro Silva <leandrodoze@gmail.com>').
 
 -behaviour(supervisor).
 

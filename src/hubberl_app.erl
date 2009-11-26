@@ -4,7 +4,7 @@
 %% @doc Callbacks for the hubberl application.
 
 -module(hubberl_app).
--author('author <author@example.com>').
+-author('Leandro Silva <leandrodoze@gmail.com>').
 
 -behaviour(application).
 -export([start/2,stop/1]).

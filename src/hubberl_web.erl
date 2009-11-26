@@ -4,7 +4,7 @@
 %% @doc Web server for hubberl.
 
 -module(hubberl_web).
--author('author <author@example.com>').
+-author('Leandro Silva <leandrodoze@gmail.com>').
 
 -export([start/1, stop/0, loop/2]).
 
@@ -20,39 +20,21 @@ start(Options) ->
 stop() ->
     mochiweb_http:stop(?MODULE).
 
-loop(Req, DocRoot) ->
-    "/" ++ Path = Req:get(path),
+loop(Request, DocRoot) ->
+    Path = Request:get(path),
 		io:format(">> Path = ~s~n", [Path]),
-    case Req:get(method) of
-        Method when Method =:= 'GET'; Method =:= 'HEAD' ->
-						io:format("   Method = ~w~n", [Method]),
-            case Path of
-                _ ->
-										io:format("Path: ~s, DocRoot: ~s~n", [Path, DocRoot]),
-                    Req:serve_file(Path, DocRoot)
-            end;
-        'POST' ->
-						io:format("   Method = POST~n"),
-            case Path of
-                _ ->
-                    Req:not_found()
-            end;
-        'PUT' ->
-						io:format("   Method = PUT~n"),
-            case Path of
-                _ ->
-                    Req:not_found()
-            end;
-        'DELETE' ->
-						io:format("   Method = DELETE~n"),
-            case Path of
-                _ ->
-                    Req:not_found()
-            end;
-        _ ->
-						io:format("   Method = _~n"),
-            Req:respond({501, [], []})
-    end.
+		
+		case Path of
+			"/adm" ++ _ ->
+				hubberl_web_adm:handler_request(Request, DocRoot);
+				
+			"/client" ++ _ ->
+				hubberl_web_client:handler_request(Request, DocRoot);
+				
+			_ ->
+				"/" ++ ShortPath = Path,
+				Request:serve_file(ShortPath, DocRoot)
+		end.
 
 %% Internal API
 
