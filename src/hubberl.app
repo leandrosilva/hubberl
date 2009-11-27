@@ -16,4 +16,4 @@
   {registered, []},
   {mod, {hubberl_app, []}},
   {env, []},
-  {applications, [kernel, stdlib, crypto]}]}.
+  {applications, [kernel, stdlib, crypto, mnesia]}]}.

@@ -20,11 +20,13 @@ ensure_started(App) ->
 start() ->
     hubberl_deps:ensure(),
     ensure_started(crypto),
+    ensure_started(mnesia),
     application:start(hubberl).
 
 %% @spec stop() -> ok
 %% @doc Stop the hubberl server.
 stop() ->
     Res = application:stop(hubberl),
+    application:stop(mnesia),
     application:stop(crypto),
     Res.
