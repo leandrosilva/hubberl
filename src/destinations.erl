@@ -24,12 +24,12 @@ read(S) ->
 	Uri = struct:get_value(<<"uri">>, S),
 
 	case hubberl_db:read({destination, Uri}) of
-		[D] ->
+		[R] ->
 			{struct,
 				[
-					{<<"uri">>, D#destination.uri},
-				 	{<<"type">>, D#destination.type},
-				 	{<<"description">>, D#destination.description}
+					{<<"uri">>, R#destination.uri},
+				 	{<<"type">>, R#destination.type},
+				 	{<<"description">>, R#destination.description}
 				]};
 		[] ->
 			_NotFound = struct:set_value(<<"status">>, not_found, S)
@@ -38,12 +38,12 @@ read(S) ->
 read_all(_S) -> 
 	Destinations = hubberl_db:read_all(destination),
 	
-	F = fun(D) ->
+	F = fun(R) ->
 				{struct,
 					[
-						{<<"uri">>, D#destination.uri},
-						{<<"type">>, D#destination.type},
-						{<<"description">>, D#destination.description}
+						{<<"uri">>, R#destination.uri},
+						{<<"type">>, R#destination.type},
+						{<<"description">>, R#destination.description}
 					]}
 	end,
 	

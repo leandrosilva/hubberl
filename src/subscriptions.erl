@@ -26,12 +26,12 @@ read(S) ->
 	Id = struct:get_value(<<"id">>, S),
 
 	case hubberl_db:read({subscription, Id}) of
-		[D] ->
+		[R] ->
 			{struct,
 				[
-					{<<"id">>, D#subscription.id},
-				 	{<<"destination_uri">>, D#subscription.destination_uri},
-				 	{<<"subscriber_uri">>, D#subscription.subscriber_uri}
+					{<<"id">>, R#subscription.id},
+				 	{<<"destination_uri">>, R#subscription.destination_uri},
+				 	{<<"subscriber_uri">>, R#subscription.subscriber_uri}
 				]};
 		[] ->
 			_NotFound = struct:set_value(<<"status">>, not_found, S)
@@ -40,12 +40,12 @@ read(S) ->
 read_all(_S) -> 
 	Subscriptions = hubberl_db:read_all(subscription),
 	
-	F = fun(D) ->
+	F = fun(R) ->
 				{struct,
 					[
-						{<<"id">>, D#subscription.id},
-					 	{<<"destination_uri">>, D#subscription.destination_uri},
-					 	{<<"subscriber_uri">>, D#subscription.subscriber_uri}
+						{<<"id">>, R#subscription.id},
+					 	{<<"destination_uri">>, R#subscription.destination_uri},
+					 	{<<"subscriber_uri">>, R#subscription.subscriber_uri}
 					]}
 	end,
 	
