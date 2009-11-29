@@ -6,13 +6,27 @@
 -module(hubberl_db).
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
--export([new_id/1, write/1, read/1, read_all/1, delete/1]).
+-export([reset/0, new_id/1, write/1, read/1, read_all/1, delete/1]).
 
 -include_lib("stdlib/include/qlc.hrl").
 
 -include("records.hrl").
 
 %% External API
+
+reset() ->
+	mnesia:stop(),
+	mnesia:delete_schema([node()]),
+	mnesia:create_schema([node()]),
+	mnesia:start(),
+
+	% table for ID generation
+	mnesia:create_table(counter, [{disc_copies, [node()]}, {attributes, record_info(fields, counter)}]),
+
+	% business tables
+	mnesia:create_table(destination, [{disc_copies, [node()]}, {attributes, record_info(fields, destination)}]),
+	mnesia:create_table(subscription, [{disc_copies, [node()]}, {attributes, record_info(fields, subscription)}]),
+	mnesia:create_table(message, [{disc_copies, [node()]}, {attributes, record_info(fields, message)}]).
 
 new_id(Key) ->
 	mnesia:dirty_update_counter({counter, Key}, 1).
@@ -40,19 +54,6 @@ delete(Rid) ->
 	mnesia:transaction(F).
 
 %% Internal API
-
-reset() ->
-	mnesia:stop(),
-	mnesia:delete_schema([node()]),
-	mnesia:create_schema([node()]),
-	mnesia:start(),
-
-	% table for ID generation
-	mnesia:create_table(counter, [{disc_copies, [node()]}, {attributes, record_info(fields, counter)}]),
-
-	% business tables
-	mnesia:create_table(queue, [{disc_copies, [node()]}, {attributes, record_info(fields, queue)}]),
-	mnesia:create_table(topic, [{disc_copies, [node()]}, {attributes, record_info(fields, topic)}]).
 
 transaction(F) ->
 	case mnesia:transaction(F) of
