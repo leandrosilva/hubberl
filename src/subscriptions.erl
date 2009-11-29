@@ -37,7 +37,7 @@ read(S) ->
 			_NotFound = struct:set_value(<<"status">>, not_found, S)
 	end.
 	
-read_all(_S) -> 
+read_all() -> 
 	Subscriptions = hubberl_db:read_all(subscription),
 	
 	F = fun(R) ->

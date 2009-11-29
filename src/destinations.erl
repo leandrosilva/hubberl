@@ -35,7 +35,7 @@ read(S) ->
 			_NotFound = struct:set_value(<<"status">>, not_found, S)
 	end.
 	
-read_all(_S) -> 
+read_all() -> 
 	Destinations = hubberl_db:read_all(destination),
 	
 	F = fun(R) ->
