@@ -49,7 +49,7 @@ read_all(_S) ->
 					]}
 	end,
 	
-	lists:map(F, Destinations).
+	lists:map(F, Subscriptions).
 
 update(S) ->
 	Id = struct:get_value(<<"id">>, S),
