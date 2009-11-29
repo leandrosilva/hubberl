@@ -7,5 +7,6 @@
 -record(counter, {key, value}).
 
 %% business records
--record(queue, {id, doc}).
--record(topic, {id, doc}).
+-record(destination, {uri, type, description}).
+-record(message, {destination_uri, publisher_uri, content}).
+-record(subscription, {destination_uri, subscriber_uri}).
