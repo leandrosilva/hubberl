@@ -2,7 +2,8 @@
 %% @copyright 2009 Leandro Silva.
 
 %% @doc Friendly API for hubberl's business operation on subscriptions for destinations.
-%%      Its input/output works fine with struct.
+%%      Its API was projected  to works fine (and facilitate, of course) when dealing
+%%      with mochiwebjson2 struct.
 
 -module(subscriptions).
 -author('Leandro Silva <leandrodoze@gmail.com>').
