@@ -14,11 +14,17 @@ handler_request(Request, DocRoot) ->
 	Path = Request:get(path),
 	Method = Request:get(method),
 	
-	log_request(Method, Path, DocRoot),
+	hubberl_log:log_request(Method, Path, DocRoot),
 
 	handler_request(Method, Path, Request, DocRoot).
 
 %% Internal API
+
+handler_request('GET', "/adm/destinations", Request, _DocRoot) ->
+  Destinations = destinations:read_all(),
+	Output = struct:to_json(Destinations),
+
+	Request:ok({"application/json", [], [Output]});
 
 handler_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
@@ -43,9 +49,3 @@ handler_request('DELETE', _Path, Request, _DocRoot) ->
 
 handler_request(_Method, _Path, Request, _DocRoot) ->
   Request:respond({501, [], []}).
-
-log_request(Method, Path, DocRoot) ->
-	io:format("{adm_request,~n"),
-	io:format("   Method = ~s,~n",  [Method]),
-	io:format("   Path = ~s,~n",    [Path]),
-	io:format("   DocRoot = ~s}~n", [DocRoot]).

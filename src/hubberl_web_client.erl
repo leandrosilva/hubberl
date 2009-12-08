@@ -14,7 +14,7 @@ handler_request(Request, DocRoot) ->
 	Path = Request:get(path),
 	Method = Request:get(method),
 	
-	log_request(Method, Path, DocRoot),
+	hubberl_log:log_request(Method, Path, DocRoot),
 
 	handler_request(Method, Path, Request, DocRoot).
 
@@ -34,9 +34,3 @@ handler_request('DELETE', _Path, Request, _DocRoot) ->
 
 handler_request(_Method, _Path, Request, _DocRoot) ->
   Request:respond({501, [], []}).
-
-log_request(Method, Path, DocRoot) ->
-	io:format("{client_request,~n"),
-	io:format("   Method = ~s,~n",  [Method]),
-	io:format("   Path = ~s,~n",    [Path]),
-	io:format("   DocRoot = ~s}~n", [DocRoot]).
