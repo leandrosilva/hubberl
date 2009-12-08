@@ -7,6 +7,6 @@
 -record(counter, {key, value}).
 
 %% business records
--record(destination, {uri, type, description}). % type = atom() : queue | topic
+-record(destination, {name, type, description}). % type = atom() : queue | topic
 -record(subscription, {id, destination_uri, subscriber_uri}).
 -record(message, {id, destination_uri, publisher_uri, content, delivered}). % delivered = atom() : not_yet | yes | no

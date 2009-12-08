@@ -13,22 +13,38 @@
 -include("records.hrl").
 
 create(S) ->
-	Uri         = struct:get_value(<<"uri">>, S),
-	Type        = struct:get_value(<<"type">>, S),
-	Description = struct:get_value(<<"description">>, S),
+	case exists(S) of
+		yes ->
+			_AlreadyExists = struct:set_value(<<"status">>, already_exists, S);
+		no ->
+			Name        = struct:get_value(<<"name">>, S),
+			Type        = struct:get_value(<<"type">>, S),
+			Description = struct:get_value(<<"description">>, S),
+
+			{atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
+
+			_Created = struct:set_value(<<"status">>, created, S)
+	end.
 	
-	{atomic, ok} = hubberl_db:write({destination, Uri, Type, Description}),
+exists(S) ->
+	Read   = read(S),
+	Status = struct:get_value(<<"status">>, Read),
 	
-	_Created = struct:set_value(<<"status">>, created, S).
+	case Status of
+		not_found ->
+			no;
+		_ ->
+			yes
+	end.
 
 read(S) ->
-	Uri = struct:get_value(<<"uri">>, S),
+	Name = struct:get_value(<<"name">>, S),
 
-	case hubberl_db:read({destination, Uri}) of
+	case hubberl_db:read({destination, Name}) of
 		[R] ->
 			{struct,
 				[
-					{<<"uri">>, R#destination.uri},
+					{<<"name">>, R#destination.name},
 				 	{<<"type">>, R#destination.type},
 				 	{<<"description">>, R#destination.description}
 				]};
@@ -42,7 +58,7 @@ read_all() ->
 	F = fun(R) ->
 				{struct,
 					[
-						{<<"uri">>, R#destination.uri},
+						{<<"name">>, R#destination.name},
 						{<<"type">>, R#destination.type},
 						{<<"description">>, R#destination.description}
 					]}
@@ -51,17 +67,17 @@ read_all() ->
 	lists:map(F, Destinations).
 
 update(S) ->
-	Uri         = struct:get_value(<<"uri">>, S),
+	Name        = struct:get_value(<<"name">>, S),
 	Type        = struct:get_value(<<"type">>, S),
 	Description = struct:get_value(<<"description">>, S),
 
-	{atomic, ok} = hubberl_db:write({destination, Uri, Type, Description}),
+	{atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
 
 	_Updated = struct:set_value(<<"status">>, updated, S).
 
 delete(S) ->
-	Uri = struct:get_value(<<"uri">>, S),
+	Name = struct:get_value(<<"name">>, S),
 
-	{atomic, ok} = hubberl_db:delete({destination, Uri}),
+	{atomic, ok} = hubberl_db:delete({destination, Name}),
 
 	_Deleted = struct:set_value(<<"status">>, deleted, S).
