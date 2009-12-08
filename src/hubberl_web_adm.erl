@@ -24,18 +24,13 @@ handler_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
 
 handler_request('POST', "/adm/destinations", Request, _DocRoot) ->
-	Input = Request:parse_post(),
+	Data = Request:parse_post(),
+	Input = struct:from_json("destination", Data),
 
-	Destination = struct:from_json("destination", Input),
-	io:format("~n--- Destination: ~p~n", [Destination]),
+	NewDestination = destinations:create(Input),
+	Output = struct:to_json(NewDestination),
 
-	NewDestination = destinations:create(Destination),
-	io:format("~n--- NewDestination: ~p~n", [NewDestination]),
-
-	JsonOutput = struct:to_json(NewDestination),
-	io:format("~n--- JsonOutput : ~p~n", [JsonOutput]),
-
-	Request:ok({"application/json", [], [JsonOutput]});
+	Request:ok({"application/json", [], [Output]});
 
 handler_request('POST', _Path, Request, _DocRoot) ->
   Request:not_found();
