@@ -22,6 +22,8 @@
 
 -export([extend/2, withdraw/2, get_value/2, set_value/3, delete/2]).
 
+%% by codezone
+-export([from_json/2, to_json/1]).
 
 %% @type key() = binary()
 %% @type value() = [integer() | float() | atom() | tuple() | binary() | string() | list()]
