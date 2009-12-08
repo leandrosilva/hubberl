@@ -64,9 +64,11 @@ ext(L1, [{K, V} | T], Result) ->
 %% @doc withdraw acts in the exact opposite way of extend (note : you just need to specify the keys).
 withdraw(S1, []) ->
 	S1;
+	
 withdraw(S1, [S|T]) ->
 	NewS = withdraw(S1, S),
 	withdraw(NewS, T);
+	
 withdraw(S1, S2) ->
 	{struct, L1} = S1,
 	{struct, L2} = S2,
@@ -101,14 +103,17 @@ wdr([{K, V} | T], L2, Result) ->
 get_value(Path, Struct) when is_tuple(Path) ->
 	L = tuple_to_list(Path),
 	get_val(L, Struct);
+	
 get_value(Key, Struct) ->
 	{struct, L} = Struct,
 	proplists:get_value(Key, L).
 
 get_val(_, undefined) ->
 	undefined;
+	
 get_val([Key], Struct) ->
 	get_value(Key, Struct);
+	
 get_val([Key | T], Struct) ->
 	NewStruct = get_value(Key, Struct),
 	get_val(T, NewStruct).
@@ -118,11 +123,13 @@ get_val([Key | T], Struct) ->
 set_value(Path, Value, Struct) when is_tuple(Path) ->
 	[H | T] = lists:reverse(tuple_to_list(Path)),
 	set_val(T, Struct, {struct, [{H, Value}]});
+	
 set_value(Key, Value, Struct) ->
 	extend(Struct, {struct, [{Key, Value}]}).
 
 set_val([], Struct, Result) ->
 	extend(Struct, Result);
+	
 set_val([Key | T], Struct, Result) ->
 	set_val(T, Struct, {struct, [{Key, Result}]}).
 
@@ -131,12 +138,13 @@ set_val([Key | T], Struct, Result) ->
 delete(Path, Struct) when is_tuple(Path) ->
 	[H | T] = lists:reverse(tuple_to_list(Path)),
 	del(T, Struct, {struct, [{H}]});
+	
 delete(Key, Struct) ->
 	{struct, L} = Struct,
 	{struct, proplists:delete(Key, L)}.
 
 del([], Struct, Result) ->
 	withdraw(Struct, Result);
+	
 del([Key | T ], Struct, Result) ->
 	del(T, Struct, {struct, [{Key, Result}]}).
-
