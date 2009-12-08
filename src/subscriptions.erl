@@ -13,9 +13,9 @@
 -include("records.hrl").
 
 create(S) ->
-	Id = hubberl_db:new_id(destination),
+	Id             = hubberl_db:new_id(destination),
 	DestinationUri = struct:get_value(<<"destination_uri">>, S),
-	SubscriberUri = struct:get_value(<<"subscriber_uri">>, S),
+	SubscriberUri  = struct:get_value(<<"subscriber_uri">>, S),
 	
 	{atomic, ok} = hubberl_db:write({subscription, Id, DestinationUri, SubscriberUri}),
 	
@@ -53,9 +53,9 @@ read_all() ->
 	lists:map(F, Subscriptions).
 
 update(S) ->
-	Id = struct:get_value(<<"id">>, S),
+	Id             = struct:get_value(<<"id">>, S),
 	DestinationUri = struct:get_value(<<"destination_uri">>, S),
-	SubscriberUri = struct:get_value(<<"subscriber_uri">>, S),
+	SubscriberUri  = struct:get_value(<<"subscriber_uri">>, S),
 
 	{atomic, ok} = hubberl_db:write({subscription, Id, DestinationUri, SubscriberUri}),
 

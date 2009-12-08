@@ -13,8 +13,8 @@
 -include("records.hrl").
 
 create(S) ->
-	Uri = struct:get_value(<<"uri">>, S),
-	Type = struct:get_value(<<"type">>, S),
+	Uri         = struct:get_value(<<"uri">>, S),
+	Type        = struct:get_value(<<"type">>, S),
 	Description = struct:get_value(<<"description">>, S),
 	
 	{atomic, ok} = hubberl_db:write({destination, Uri, Type, Description}),
@@ -51,8 +51,8 @@ read_all() ->
 	lists:map(F, Destinations).
 
 update(S) ->
-	Uri = struct:get_value(<<"uri">>, S),
-	Type = struct:get_value(<<"type">>, S),
+	Uri         = struct:get_value(<<"uri">>, S),
+	Type        = struct:get_value(<<"type">>, S),
 	Description = struct:get_value(<<"description">>, S),
 
 	{atomic, ok} = hubberl_db:write({destination, Uri, Type, Description}),

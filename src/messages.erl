@@ -13,10 +13,10 @@
 -include("records.hrl").
 
 create(S) ->
-	Id = hubberl_db:new_id(message),
+	Id             = hubberl_db:new_id(message),
 	DestinationUri = struct:get_value(<<"destination_uri">>, S),
-	PublisherUri = struct:get_value(<<"publisher_uri">>, S),
-	Content = struct:get_value(<<"content">>, S),
+	PublisherUri   = struct:get_value(<<"publisher_uri">>, S),
+	Content        = struct:get_value(<<"content">>, S),
 	
 	{atomic, ok} = hubberl_db:write({message, Id, DestinationUri, PublisherUri, Content, not_yet}),
 	
@@ -58,10 +58,10 @@ read_all() ->
 	lists:map(F, Messages).
 
 update(S) ->
-	Id = struct:get_value(<<"id">>, S),
+	Id             = struct:get_value(<<"id">>, S),
 	DestinationUri = struct:get_value(<<"destination_uri">>, S),
-	PublisherUri = struct:get_value(<<"publisher_uri">>, S),
-	Content = struct:get_value(<<"content">>, S),
+	PublisherUri   = struct:get_value(<<"publisher_uri">>, S),
+	Content        = struct:get_value(<<"content">>, S),
 	
 	{atomic, ok} = hubberl_db:write({message, Id, DestinationUri, PublisherUri, Content, not_yet}),
 

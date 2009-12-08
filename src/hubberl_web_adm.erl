@@ -23,6 +23,24 @@ handler_request(Request, DocRoot) ->
 handler_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
 
+handler_request('POST', "/adm/destinations", Request, )
+	Data = Request:parse_post(),
+
+	Json = proplists:get_value("json", Data),
+	Struct = mochijson2:decode(Json),
+
+	io:format("~n>>> Struct: ~p~n", [Struct]),
+
+	Uri = binary_to_list(struct:get_value(<<"uri">>, Struct)),
+
+	Result = notes:Action(Struct),
+
+	%%io:format("~nResult : ~p~n", [Result]),
+
+	DataOut = mochijson2:encode(Result),
+
+	Request:ok({"application/json", [], [DataOut]});
+
 handler_request('POST', _Path, Request, _DocRoot) ->
   Request:not_found();
 
