@@ -119,7 +119,7 @@ get_val([Key | T], Struct) ->
 	get_val(T, NewStruct).
 
 
-%% @spec set_value(path() | key(), value(),struct()) -> struct()
+%% @spec set_value(path() | key(), value(), struct()) -> struct()
 set_value(Path, Value, Struct) when is_tuple(Path) ->
 	[H | T] = lists:reverse(tuple_to_list(Path)),
 	set_val(T, Struct, {struct, [{H, Value}]});
@@ -148,3 +148,17 @@ del([], Struct, Result) ->
 	
 del([Key | T ], Struct, Result) ->
 	del(T, Struct, {struct, [{Key, Result}]}).
+	
+
+%% @spec from_json(request(), key()) -> struct()
+%% @doc by codezone
+from_json(Request, Key) ->
+	Input = Request:parse_post(),
+	JsonInput = proplists:get_value(Key, Input),
+
+	mochijson2:decode(JsonInput).
+	
+%% @spec to_json(struct()) -> list()
+%% @doc by codezone
+to_json(Struct) ->
+	mochijson2:encode(Struct).

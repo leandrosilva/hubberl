@@ -20,29 +20,17 @@ handler_request(Request, DocRoot) ->
 
 %% Internal API
 
-struct_from_json(Request, Type) ->
-	Input = Request:parse_post(),
-	io:format("~n--- Input: ~p~n", [Input]),
-
-	JsonInput = proplists:get_value(Type, Input),
-	io:format("~n--- JsonInput: ~p~n", [JsonInput]),
-
-	mochijson2:decode(JsonInput).
-	
-json_from_struct(Struct) ->
-	mochijson2:encode(Struct).
-
 handler_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
 
 handler_request('POST', "/adm/destinations", Request, _DocRoot) ->
-	Destination = struct_from_json(Request, "destination"),
+	Destination = struct:from_json(Request, "destination"),
 	io:format("~n--- Destination: ~p~n", [Destination]),
 
 	NewDestination = destinations:create(Destination),
 	io:format("~n--- NewDestination: ~p~n", [NewDestination]),
 
-	JsonOutput = json_from_struct(NewDestination),
+	JsonOutput = struct:to_json(NewDestination),
 	io:format("~n--- JsonOutput : ~p~n", [JsonOutput]),
 
 	Request:ok({"application/json", [], [JsonOutput]});
