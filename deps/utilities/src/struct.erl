@@ -27,6 +27,7 @@
 %% @type value() = [integer() | float() | atom() | tuple() | binary() | string() | list()]
 %% @type struct() = tuple()
 %% @type path() = tuple()
+%% @type input() = [integer() | list()]
 
 %% @spec extend(struct(), list()) -> struct()
 %% @doc Extend a json struct with one or more json struct (add new leaves and modify the existing ones).
@@ -150,15 +151,14 @@ del([Key | T ], Struct, Result) ->
 	del(T, Struct, {struct, [{Key, Result}]}).
 	
 
-%% @spec from_json(request(), key()) -> struct()
-%% @doc by codezone
-from_json(Request, Key) ->
-	Input = Request:parse_post(),
+%% @spec from_json(key(), input()) -> struct()
+%% @doc by codezone, using mochijson2:decode/1
+from_json(Key, Input) ->
 	JsonInput = proplists:get_value(Key, Input),
-
 	mochijson2:decode(JsonInput).
 	
+	
 %% @spec to_json(struct()) -> list()
-%% @doc by codezone
+%% @doc by codezone, using mochijson2:encode/1
 to_json(Struct) ->
 	mochijson2:encode(Struct).

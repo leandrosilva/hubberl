@@ -24,7 +24,9 @@ handler_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
 
 handler_request('POST', "/adm/destinations", Request, _DocRoot) ->
-	Destination = struct:from_json(Request, "destination"),
+	Input = Request:parse_post(),
+
+	Destination = struct:from_json("destination", Input),
 	io:format("~n--- Destination: ~p~n", [Destination]),
 
 	NewDestination = destinations:create(Destination),
