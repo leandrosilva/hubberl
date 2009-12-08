@@ -13,7 +13,7 @@
 -include("records.hrl").
 
 create(S) ->
-	Id             = hubberl_db:new_id(destination),
+	Id             = hubberl_db:new_id(subscription),
 	DestinationUri = struct:get_value(<<"destination_uri">>, S),
 	SubscriberUri  = struct:get_value(<<"subscriber_uri">>, S),
 	
