@@ -1,3 +1,5 @@
 .DS_Store
 draft
 ebin/
+db/
+test/
