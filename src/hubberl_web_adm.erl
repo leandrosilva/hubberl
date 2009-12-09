@@ -52,6 +52,14 @@ handler_request('POST', _Path, Request, _DocRoot) ->
 handler_request('PUT', _Path, Request, _DocRoot) ->
   Request:not_found();
 
+handler_request('DELETE', "/adm/destination/" ++ Name, Request, _DocRoot) ->
+	Input = {struct, [{<<"name">>, list_to_binary(Name)}]},
+
+	Destination = destinations:delete(Input),
+	Output = struct:to_json(Destination),
+
+	Request:ok({"application/json", [], [Output]});
+
 handler_request('DELETE', _Path, Request, _DocRoot) ->
   Request:not_found();
 
