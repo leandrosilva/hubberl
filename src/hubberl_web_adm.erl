@@ -26,10 +26,18 @@ handler_request('GET', "/adm/destinations", Request, _DocRoot) ->
 
 	Request:ok({"application/json", [], [Output]});
 
+handler_request('GET', "/adm/destination/" ++ Name, Request, _DocRoot) ->
+	Input = {struct, [{<<"name">>, list_to_binary(Name)}]},
+
+	Destination = destinations:read(Input),
+	Output = struct:to_json(Destination),
+
+	Request:ok({"application/json", [], [Output]});
+
 handler_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
 
-handler_request('POST', "/adm/destinations", Request, _DocRoot) ->
+handler_request('POST', "/adm/destination", Request, _DocRoot) ->
 	Data = Request:parse_post(),
 	Input = struct:from_json("destination", Data),
 
