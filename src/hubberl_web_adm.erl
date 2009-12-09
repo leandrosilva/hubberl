@@ -27,7 +27,7 @@ handler_request('GET', "/adm/destinations", Request, _DocRoot) ->
 	Request:ok({"application/json", [], [Output]});
 
 handler_request('GET', "/adm/destination/" ++ Name, Request, _DocRoot) ->
-	Input = {struct, [{<<"name">>, list_to_binary(Name)}]},
+	Input = struct:new("name", Name),
 
 	Destination = destinations:read(Input),
 	Output = struct:to_json(Destination),
@@ -53,7 +53,7 @@ handler_request('PUT', _Path, Request, _DocRoot) ->
   Request:not_found();
 
 handler_request('DELETE', "/adm/destination/" ++ Name, Request, _DocRoot) ->
-	Input = {struct, [{<<"name">>, list_to_binary(Name)}]},
+	Input = struct:new("name", Name),
 
 	Destination = destinations:delete(Input),
 	Output = struct:to_json(Destination),

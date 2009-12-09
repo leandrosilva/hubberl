@@ -24,6 +24,7 @@
 
 %% by codezone
 -export([from_json/2, to_json/1]).
+-export([new/2]).
 
 %% @type key() = binary()
 %% @type value() = [integer() | float() | atom() | tuple() | binary() | string() | list()]
@@ -164,3 +165,14 @@ from_json(Key, Input) ->
 %% @doc by codezone, using mochijson2:encode/1
 to_json(Struct) ->
 	mochijson2:encode(Struct).
+
+
+%% @spec new(key(), value()) -> struct()
+%% @doc by codezone
+new(Key, Value) when not is_binary(Value) ->
+	io:format("aqui"),
+	{struct, [{list_to_binary(Key), list_to_binary(Value)}]};
+
+new(Key, Value) ->
+	io:format("nao, aqui"),
+	{struct, [{list_to_binary(Key), Value}]}.
