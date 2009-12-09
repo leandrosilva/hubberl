@@ -170,9 +170,7 @@ to_json(Struct) ->
 %% @spec new(key(), value()) -> struct()
 %% @doc by codezone
 new(Key, Value) when not is_binary(Value) ->
-	io:format("aqui"),
 	{struct, [{list_to_binary(Key), list_to_binary(Value)}]};
 
 new(Key, Value) ->
-	io:format("nao, aqui"),
 	{struct, [{list_to_binary(Key), Value}]}.
