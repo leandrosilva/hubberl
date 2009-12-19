@@ -11,7 +11,7 @@
 %% External exports
 -export([start_link/0, upgrade/0]).
 
-%% supervisor callbacks
+%% Supervisor callbacks
 -export([init/1]).
 
 %% @spec start_link() -> ServerRet
