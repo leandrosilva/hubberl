@@ -1,4 +1,20 @@
-Hubberl is a simple kind of message hub based on HTTP
+Hubberl is a simple kind of message hub based on HTTP.
+
+---
+
+If you want to hack this code a little bit, it's really easy to getting started.
+
+1. Install ebuilder (http://github.com/leandrosilva/ebuilder) tool:
+
+  gem install ebuilder
+  
+2. Compile the Hubber:
+
+  ebuilder compile
+
+3. Run tests:
+
+  ebuilder test hubberl_test -a hubberl -d -m
 
 ---
 
