@@ -25,8 +25,8 @@ loop(Request, DocRoot) ->
 		io:format(">> Path = ~s~n", [Path]),
 		
 		case Path of
-			"/adm" ++ _ ->
-				hubberl_web_adm:handler_request(Request, DocRoot);
+			"/admin" ++ _ ->
+				hubberl_web_admin:handler_request(Request, DocRoot);
 				
 			"/client" ++ _ ->
 				hubberl_web_client:handler_request(Request, DocRoot);

@@ -3,7 +3,7 @@
 
 %% @doc Request handler for hubberl's HTTP API for administration interface.
 
--module(hubberl_web_adm).
+-module(hubberl_web_admin).
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
 -export([handler_request/2]).
@@ -20,13 +20,13 @@ handler_request(Request, DocRoot) ->
 
 %% Internal API
 
-handler_request('GET', "/adm/destinations", Request, _DocRoot) ->
+handler_request('GET', "/admin/destinations", Request, _DocRoot) ->
   Destinations = destinations:read_all(),
 	Output = struct:to_json(Destinations),
 
 	Request:ok({"application/json", [], [Output]});
 
-handler_request('GET', "/adm/destinations/" ++ Name, Request, _DocRoot) ->
+handler_request('GET', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
 	Input = struct:new("name", Name),
 
 	Destination = destinations:read(Input),
@@ -37,7 +37,7 @@ handler_request('GET', "/adm/destinations/" ++ Name, Request, _DocRoot) ->
 handler_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
 
-handler_request('POST', "/adm/destinations", Request, _DocRoot) ->
+handler_request('POST', "/admin/destinations", Request, _DocRoot) ->
 	Data = Request:parse_post(),
 	Input = struct:from_json("destination", Data),
 
@@ -52,7 +52,7 @@ handler_request('POST', _Path, Request, _DocRoot) ->
 handler_request('PUT', _Path, Request, _DocRoot) ->
   Request:not_found();
 
-handler_request('DELETE', "/adm/destinations/" ++ Name, Request, _DocRoot) ->
+handler_request('DELETE', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
 	Input = struct:new("name", Name),
 
 	Destination = destinations:delete(Input),
