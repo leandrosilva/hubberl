@@ -44,6 +44,7 @@ describe_hubberl_test_() ->
 -define(RESOURCE_URI, "http://localhost:8000/admin/destinations").
 
 before_all() ->
+  hubberl_db:reset(),
   application:start(inets),
   ok.
 
