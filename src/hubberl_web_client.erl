@@ -6,31 +6,31 @@
 -module(hubberl_web_client).
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
--export([handler_request/2]).
+-export([handle_request/2]).
 
 %% External API
 
-handler_request(Request, DocRoot) ->
+handle_request(Request, DocRoot) ->
 	Path = Request:get(path),
 	Method = Request:get(method),
 	
 	hubberl_log:log_request(Method, Path, DocRoot),
 
-	handler_request(Method, Path, Request, DocRoot).
+	handle_request(Method, Path, Request, DocRoot).
 
 %% Internal API
 
-handler_request('GET', _Path, Request, _DocRoot) ->
+handle_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
 
-handler_request('POST', _Path, Request, _DocRoot) ->
+handle_request('POST', _Path, Request, _DocRoot) ->
   Request:not_found();
 
-handler_request('PUT', _Path, Request, _DocRoot) ->
+handle_request('PUT', _Path, Request, _DocRoot) ->
   Request:not_found();
 
-handler_request('DELETE', _Path, Request, _DocRoot) ->
+handle_request('DELETE', _Path, Request, _DocRoot) ->
   Request:not_found();
 
-handler_request(_Method, _Path, Request, _DocRoot) ->
+handle_request(_Method, _Path, Request, _DocRoot) ->
   Request:respond({501, [], []}).

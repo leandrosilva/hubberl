@@ -58,9 +58,19 @@ after_all() ->
 %% hubberl_web_adm module
 %%
 
+% {ok,{{"HTTP/1.1",200,"OK"},
+%      [{"date",
+%        "Thu, 02 Sep 2010 04:29:04 GMT"},
+%       {"server",
+%        "MochiWeb/1.0 (Any of you quaids got a smint?)"},
+%       {"content-length","2"},
+%       {"content-type",[...]}],
+%      "[]"}}
+
 should_accept_get_to_list_all_destinations() ->
   AllDestinations = http:request(?RESOURCE_URI),
-  ?assertMatch(yet_not_implemented, AllDestinations).
+
+  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, _, _}}, AllDestinations).
 
 should_accept_get_to_retrieve_a_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).

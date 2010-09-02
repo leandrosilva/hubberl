@@ -26,10 +26,10 @@ loop(Request, DocRoot) ->
 		
 		case Path of
 			"/admin" ++ _ ->
-				hubberl_web_admin:handler_request(Request, DocRoot);
+				hubberl_web_admin:handle_request(Request, DocRoot);
 				
 			"/client" ++ _ ->
-				hubberl_web_client:handler_request(Request, DocRoot);
+				hubberl_web_client:handle_request(Request, DocRoot);
 				
 			_ ->
 				"/" ++ ShortPath = Path,
