@@ -6,19 +6,9 @@
 -module(hubberl_web_client).
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
--export([handle_request/2]).
+-export([handle_request/4]).
 
 %% External API
-
-handle_request(Request, DocRoot) ->
-	Path = Request:get(path),
-	Method = Request:get(method),
-	
-	hubberl_log:log_request(Method, Path, DocRoot),
-
-	handle_request(Method, Path, Request, DocRoot).
-
-%% Internal API
 
 handle_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();

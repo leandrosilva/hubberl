@@ -21,16 +21,20 @@ describe_hubberl_test_() ->
         
       {"when in admin mode",
         [
+          {"should accept POST on /admin/destinations to create a destination",
+            fun should_accept_post_to_create_a_destination/0},
           {"should accept GET on /admin/destinations to list all destinations",
             fun should_accept_get_to_list_all_destinations/0},
           {"should accept GET on /admin/destinations/{name} to retrieve a destination",
             fun should_accept_get_to_retrieve_a_destination/0},
-          {"should accept POST on /admin/destinations to create a destination",
-            fun should_accept_post_to_create_a_destination/0},
+          {"should return 404 on /admin/destinations/{name} when GET a destination that doesn't exist",
+            fun should_return_404_when_get_a_destination_that_doesnt_exist/0},
           {"should not accept PUT on /admin/destinations",
             fun should_not_accept_put/0},
           {"should accept DELETE on /admin/destinations/{name} to remove a destination",
-            fun should_accept_delete_to_remove_a_destination/0}
+            fun should_accept_delete_to_remove_a_destination/0},
+          {"should return 404 on /admin/destinations/{name} when DELETE a destination that doesn't exist",
+            fun should_return_404_when_delete_a_destination_that_doesnt_exist/0}
         ]},
               
       {"after tests",
@@ -58,6 +62,22 @@ after_all() ->
 %% hubberl_web_adm module
 %%
 
+should_accept_post_to_create_a_destination() ->
+  HttpMethod = post,
+  Headers = [],
+  ContentType = "application/json",
+  Body = "destination={\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
+  HttpOptions = [],
+  Options = [{body_format, string}],
+
+  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
+  io:format(user, "~n--- HttpResponse = ~w~n", [HttpResponse]),
+  
+  ?assertMatch(yet_not_implemented, HttpResponse).
+
+%
+% Example:
+%
 % {ok,{{"HTTP/1.1",200,"OK"},
 %      [{"date",
 %        "Thu, 02 Sep 2010 04:29:04 GMT"},
@@ -66,6 +86,7 @@ after_all() ->
 %       {"content-length","2"},
 %       {"content-type",[...]}],
 %      "[]"}}
+%
 
 should_accept_get_to_list_all_destinations() ->
   AllDestinations = http:request(?RESOURCE_URI),
@@ -75,7 +96,7 @@ should_accept_get_to_list_all_destinations() ->
 should_accept_get_to_retrieve_a_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
 
-should_accept_post_to_create_a_destination() ->
+should_return_404_when_get_a_destination_that_doesnt_exist() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
 
 should_not_accept_put() ->
@@ -83,3 +104,7 @@ should_not_accept_put() ->
 
 should_accept_delete_to_remove_a_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
+
+should_return_404_when_delete_a_destination_that_doesnt_exist() ->
+  ?assertMatch(yet_not_implemented, yet_not_implemented).
+  

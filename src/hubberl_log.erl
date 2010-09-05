@@ -10,8 +10,8 @@
 %% @spec log_request(Method, Path, DocRoot) -> ok
 %% @doc log informations about request
 log_request(Method, Path, DocRoot) ->
-	io:format("=LOG REPORT===~n"),
-	io:format("   {request,~n"),
-	io:format("      Method = ~s,~n",  [Method]),
-	io:format("      Path = ~s,~n",    [Path]),
-	io:format("      DocRoot = ~s}~n", [DocRoot]).
+	io:format("=HTTP REQUEST REPORT====~n"),
+	io:format("{request,~n"),
+	io:format("   Method = ~s,~n",  [Method]),
+	io:format("   Path = ~s,~n",    [Path]),
+	io:format("   DocRoot = ~s}~n", [DocRoot]).

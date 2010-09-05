@@ -21,13 +21,17 @@ stop() ->
   mochiweb_http:stop(?MODULE).
 
 loop(Request, DocRoot) ->
-  Path = Request:get(path),
+	Method = Request:get(method),
+	Path = Request:get(path),
+	
+	hubberl_log:log_request(Method, Path, DocRoot),
+
   case Path of
     "/admin" ++ _ ->
-      hubberl_web_admin:handle_request(Request, DocRoot);
+      hubberl_web_admin:handle_request(Method, Path, Request, DocRoot);
       
     "/client" ++ _ ->
-      hubberl_web_client:handle_request(Request, DocRoot);
+      hubberl_web_client:handle_request(Method, Path, Request, DocRoot);
       
     _ ->
       "/" ++ ShortPath = Path,

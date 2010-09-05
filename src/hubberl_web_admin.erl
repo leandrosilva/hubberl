@@ -6,19 +6,9 @@
 -module(hubberl_web_admin).
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
--export([handle_request/2]).
+-export([handle_request/4]).
 
 %% External API
-
-handle_request(Request, DocRoot) ->
-	Path = Request:get(path),
-	Method = Request:get(method),
-	
-	hubberl_log:log_request(Method, Path, DocRoot),
-
-	handle_request(Method, Path, Request, DocRoot).
-
-%% Internal API
 
 handle_request('GET', "/admin/destinations", Request, _DocRoot) ->
   Destinations = destinations:read_all(),
@@ -40,7 +30,7 @@ handle_request('GET', _Path, Request, _DocRoot) ->
 handle_request('POST', "/admin/destinations", Request, _DocRoot) ->
 	Data = Request:parse_post(),
 	Input = struct:from_json("destination", Data),
-
+	
 	NewDestination = destinations:create(Input),
 	Output = struct:to_json(NewDestination),
 
