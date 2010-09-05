@@ -65,7 +65,7 @@ after_all() ->
 should_accept_post_to_create_a_destination() ->
   HttpMethod = post,
   Headers = [],
-  ContentType = "application/json",
+  ContentType = "application/text",
   Body = "destination={\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
   HttpOptions = [],
   Options = [{body_format, string}],
