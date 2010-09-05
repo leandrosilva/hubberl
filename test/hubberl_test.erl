@@ -65,15 +65,14 @@ after_all() ->
 should_accept_post_to_create_a_destination() ->
   HttpMethod = post,
   Headers = [],
-  ContentType = "application/text",
+  ContentType = "application/x-www-form-urlencoded",
   Body = "destination={\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
   HttpOptions = [],
   Options = [{body_format, string}],
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
-  io:format(user, "~n--- HttpResponse = ~w~n", [HttpResponse]),
   
-  ?assertMatch(yet_not_implemented, HttpResponse).
+  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, _, _}}, HttpResponse).
 
 %
 % Example:
