@@ -72,7 +72,11 @@ should_accept_post_to_create_a_destination() ->
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
   
-  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, _, _}}, HttpResponse).
+  ?assertMatch({ok,
+                 {{"HTTP/1.1", 200, "OK"},
+                  [_, _, _, {"content-type", "application/json"}],
+                  "{\"status\":\"created\",\"name\":\"payments\",\"type\":\"queue\",\"description\":\"payments queue\"}"}},
+               HttpResponse).
 
 %
 % Example:
