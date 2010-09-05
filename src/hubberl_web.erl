@@ -11,32 +11,30 @@
 %% External API
 
 start(Options) ->
-    {DocRoot, Options1} = get_option(docroot, Options),
-    Loop = fun (Req) ->
-                   ?MODULE:loop(Req, DocRoot)
-           end,
-    mochiweb_http:start([{name, ?MODULE}, {loop, Loop} | Options1]).
+  {DocRoot, Options1} = get_option(docroot, Options),
+  Loop = fun (Req) ->
+           ?MODULE:loop(Req, DocRoot)
+         end,
+  mochiweb_http:start([{name, ?MODULE}, {loop, Loop} | Options1]).
 
 stop() ->
-    mochiweb_http:stop(?MODULE).
+  mochiweb_http:stop(?MODULE).
 
 loop(Request, DocRoot) ->
-    Path = Request:get(path),
-		io:format(">> Path = ~s~n", [Path]),
-		
-		case Path of
-			"/admin" ++ _ ->
-				hubberl_web_admin:handle_request(Request, DocRoot);
-				
-			"/client" ++ _ ->
-				hubberl_web_client:handle_request(Request, DocRoot);
-				
-			_ ->
-				"/" ++ ShortPath = Path,
-				Request:serve_file(ShortPath, DocRoot)
-		end.
+  Path = Request:get(path),
+  case Path of
+    "/admin" ++ _ ->
+      hubberl_web_admin:handle_request(Request, DocRoot);
+      
+    "/client" ++ _ ->
+      hubberl_web_client:handle_request(Request, DocRoot);
+      
+    _ ->
+      "/" ++ ShortPath = Path,
+      Request:serve_file(ShortPath, DocRoot)
+  end.
 
 %% Internal API
 
 get_option(Option, Options) ->
-    {proplists:get_value(Option, Options), proplists:delete(Option, Options)}.
+  {proplists:get_value(Option, Options), proplists:delete(Option, Options)}.
