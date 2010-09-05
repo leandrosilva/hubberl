@@ -77,19 +77,6 @@ should_accept_post_to_create_a_destination() ->
                      "{\"status\":\"created\",\"name\":\"payments\",\"type\":\"queue\",\"description\":\"payments queue\"}"}},
                HttpResponse).
 
-%
-% Example:
-%
-% {ok,{{"HTTP/1.1",200,"OK"},
-%      [{"date",
-%        "Thu, 02 Sep 2010 04:29:04 GMT"},
-%       {"server",
-%        "MochiWeb/1.0 (Any of you quaids got a smint?)"},
-%       {"content-length","2"},
-%       {"content-type",[...]}],
-%      "[]"}}
-%
-
 should_accept_get_to_list_all_destinations() ->
   AllDestinations = http:request(?RESOURCE_URI),
 
