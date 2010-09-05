@@ -23,6 +23,8 @@ describe_hubberl_test_() ->
         [
           {"should accept POST on /admin/destinations to create a destination",
             fun should_accept_post_to_create_a_destination/0},
+          {"should return 404 on /admin/destinations if try to create a invalid resource",
+            fun should_return_404_if_try_to_create_a_invalid_resource/0},
           {"should accept GET on /admin/destinations to list all destinations",
             fun should_accept_get_to_list_all_destinations/0},
           {"should accept GET on /admin/destinations/{name} to retrieve a destination",
@@ -76,6 +78,11 @@ should_accept_post_to_create_a_destination() ->
                      [_, _, _, {"content-type", "application/json"}],
                      "{\"status\":\"created\",\"name\":\"payments\",\"type\":\"queue\",\"description\":\"payments queue\"}"}},
                HttpResponse).
+
+should_return_404_if_try_to_create_a_invalid_resource() ->
+  HttpResponse = http:request(post, {?RESOURCE_URI ++ "_invalid", [], [], ""}, [], []),
+  
+  ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
 should_accept_get_to_list_all_destinations() ->
   AllDestinations = http:request(?RESOURCE_URI),
