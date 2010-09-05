@@ -27,14 +27,14 @@ describe_hubberl_test_() ->
             fun should_accept_get_to_list_all_destinations/0},
           {"should accept GET on /admin/destinations/{name} to retrieve a destination",
             fun should_accept_get_to_retrieve_a_destination/0},
-          {"should return 404 on /admin/destinations/{name} when GET a destination that doesn't exist",
-            fun should_return_404_when_get_a_destination_that_doesnt_exist/0},
+          {"should return 404 on /admin/destinations/{name} if try to GET a invalid destination",
+            fun should_return_404_if_try_to_get_a_invalid_destination/0},
           {"should not accept PUT on /admin/destinations",
             fun should_not_accept_put/0},
           {"should accept DELETE on /admin/destinations/{name} to remove a destination",
             fun should_accept_delete_to_remove_a_destination/0},
-          {"should return 404 on /admin/destinations/{name} when DELETE a destination that doesn't exist",
-            fun should_return_404_when_delete_a_destination_that_doesnt_exist/0}
+          {"should return 404 on /admin/destinations/{name} if try to DELETE a invalid destination",
+            fun should_return_404_if_try_to_delete_a_invalid_destination/0}
         ]},
               
       {"after tests",
@@ -88,7 +88,7 @@ should_accept_get_to_list_all_destinations() ->
 should_accept_get_to_retrieve_a_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
 
-should_return_404_when_get_a_destination_that_doesnt_exist() ->
+should_return_404_if_try_to_get_a_invalid_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
 
 should_not_accept_put() ->
@@ -97,6 +97,6 @@ should_not_accept_put() ->
 should_accept_delete_to_remove_a_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
 
-should_return_404_when_delete_a_destination_that_doesnt_exist() ->
+should_return_404_if_try_to_delete_a_invalid_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
   
