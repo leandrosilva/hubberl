@@ -16,17 +16,17 @@
 
 reset() ->
 	mnesia:stop(),
-	mnesia:delete_schema([node()]),
-	mnesia:create_schema([node()]),
+	mnesia:delete_schema(cluster_nodes()),
+	mnesia:create_schema(cluster_nodes()),
 	mnesia:start(),
 
 	% table for ID generation
-	mnesia:create_table(counter, [{disc_copies, [node()]}, {attributes, record_info(fields, counter)}]),
+	mnesia:create_table(counter, [{disc_copies, cluster_nodes()}, {attributes, record_info(fields, counter)}]),
 
 	% business tables
-	mnesia:create_table(destination, [{disc_copies, [node()]}, {attributes, record_info(fields, destination)}]),
-	mnesia:create_table(subscription, [{disc_copies, [node()]}, {attributes, record_info(fields, subscription)}]),
-	mnesia:create_table(message, [{disc_copies, [node()]}, {attributes, record_info(fields, message)}]).
+	mnesia:create_table(destination, [{disc_copies, cluster_nodes()}, {attributes, record_info(fields, destination)}]),
+	mnesia:create_table(subscription, [{disc_copies, cluster_nodes()}, {attributes, record_info(fields, subscription)}]),
+	mnesia:create_table(message, [{disc_copies, cluster_nodes()}, {attributes, record_info(fields, message)}]).
 
 new_id(Key) ->
 	mnesia:dirty_update_counter({counter, Key}, 1).
@@ -54,6 +54,9 @@ delete(Rid) ->
 	mnesia:transaction(F).
 
 %% Internal API
+
+cluster_nodes() ->
+  [node()].
 
 transaction(F) ->
 	case mnesia:transaction(F) of
