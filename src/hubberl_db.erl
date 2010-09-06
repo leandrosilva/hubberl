@@ -35,7 +35,7 @@ write(Rec) ->
 	F = fun() ->
 			mnesia:write(Rec)
 	end,
-	mnesia:transaction(F).
+	transaction(F).
 
 read(Rid) ->
 	F = fun() ->
@@ -51,7 +51,7 @@ delete(Rid) ->
 	F = fun() ->
 			mnesia:delete(Rid)
 	end,
-	mnesia:transaction(F).
+	transaction(F).
 
 %% Internal API
 
@@ -60,6 +60,8 @@ cluster_nodes() ->
 
 transaction(F) ->
 	case mnesia:transaction(F) of
+		{atomic, ok} = Sucess ->
+		  Sucess;
 		{atomic, Result} ->
 			Result;
 		{aborted, _Reason} ->
