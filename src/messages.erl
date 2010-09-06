@@ -14,11 +14,11 @@
 
 create(S) ->
 	Id             = hubberl_db:new_id(message),
-	DestinationUri = struct:get_value(<<"destination_uri">>, S),
+	DestinationName = struct:get_value(<<"destination_name">>, S),
 	PublisherUri   = struct:get_value(<<"publisher_uri">>, S),
 	Content        = struct:get_value(<<"content">>, S),
 	
-	{atomic, ok} = hubberl_db:write({message, Id, DestinationUri, PublisherUri, Content, not_yet}),
+	{atomic, ok} = hubberl_db:write({message, Id, DestinationName, PublisherUri, Content, not_yet}),
 	
 	New = struct:set_value(<<"id">>, Id),
 	
@@ -32,7 +32,7 @@ read(S) ->
 			{struct,
 				[
 					{<<"id">>, R#message.id},
-				 	{<<"destination_uri">>, R#message.destination_uri},
+				 	{<<"destination_name">>, R#message.destination_name},
 				 	{<<"publisher_uri">>, R#message.publisher_uri},
 				 	{<<"content">>, R#message.content},
 				 	{<<"delivered">>, R#message.delivered}
@@ -48,7 +48,7 @@ read_all() ->
 				{struct,
 					[
 						{<<"id">>, R#message.id},
-					 	{<<"destination_uri">>, R#message.destination_uri},
+					 	{<<"destination_name">>, R#message.destination_name},
 					 	{<<"publisher_uri">>, R#message.publisher_uri},
 					 	{<<"content">>, R#message.content},
 					 	{<<"delivered">>, R#message.delivered}
@@ -59,11 +59,11 @@ read_all() ->
 
 update(S) ->
 	Id             = struct:get_value(<<"id">>, S),
-	DestinationUri = struct:get_value(<<"destination_uri">>, S),
+	DestinationName = struct:get_value(<<"destination_name">>, S),
 	PublisherUri   = struct:get_value(<<"publisher_uri">>, S),
 	Content        = struct:get_value(<<"content">>, S),
 	
-	{atomic, ok} = hubberl_db:write({message, Id, DestinationUri, PublisherUri, Content, not_yet}),
+	{atomic, ok} = hubberl_db:write({message, Id, DestinationName, PublisherUri, Content, not_yet}),
 
 	_Updated = struct:set_value(<<"status">>, updated, S).
 

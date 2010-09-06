@@ -13,25 +13,21 @@
 -include("records.hrl").
 
 create(S) ->
-	Id             = hubberl_db:new_id(subscription),
-	DestinationUri = struct:get_value(<<"destination_uri">>, S),
+	DestinationName = struct:get_value(<<"destination_name">>, S),
 	SubscriberUri  = struct:get_value(<<"subscriber_uri">>, S),
 	
-	{atomic, ok} = hubberl_db:write({subscription, Id, DestinationUri, SubscriberUri}),
+	{atomic, ok} = hubberl_db:write({subscription, DestinationName, SubscriberUri}),
 	
-	New = struct:set_value(<<"id">>, Id),
-	
-	_Created = struct:set_value(<<"status">>, created, New).
+	_Created = struct:set_value(<<"status">>, created, S).
 
 read(S) ->
-	Id = struct:get_value(<<"id">>, S),
+	DestinationName = struct:get_value(<<"destination_name">>, S),
 
-	case hubberl_db:read({subscription, Id}) of
+	case hubberl_db:read({subscription, DestinationName}) of
 		[R] ->
 			{struct,
 				[
-					{<<"id">>, R#subscription.id},
-				 	{<<"destination_uri">>, R#subscription.destination_uri},
+				 	{<<"destination_name">>, R#subscription.destination_name},
 				 	{<<"subscriber_uri">>, R#subscription.subscriber_uri}
 				]};
 		[] ->
@@ -44,8 +40,7 @@ read_all() ->
 	F = fun(R) ->
 				{struct,
 					[
-						{<<"id">>, R#subscription.id},
-					 	{<<"destination_uri">>, R#subscription.destination_uri},
+					 	{<<"destination_name">>, R#subscription.destination_name},
 					 	{<<"subscriber_uri">>, R#subscription.subscriber_uri}
 					]}
 	end,
@@ -53,17 +48,16 @@ read_all() ->
 	lists:map(F, Subscriptions).
 
 update(S) ->
-	Id             = struct:get_value(<<"id">>, S),
-	DestinationUri = struct:get_value(<<"destination_uri">>, S),
+	DestinationName = struct:get_value(<<"destination_name">>, S),
 	SubscriberUri  = struct:get_value(<<"subscriber_uri">>, S),
 
-	{atomic, ok} = hubberl_db:write({subscription, Id, DestinationUri, SubscriberUri}),
+	{atomic, ok} = hubberl_db:write({subscription, DestinationName, SubscriberUri}),
 
 	_Updated = struct:set_value(<<"status">>, updated, S).
 
 delete(S) ->
-	Id = struct:get_value(<<"id">>, S),
+	DestinationName = struct:get_value(<<"destination_name">>, S),
 
-	{atomic, ok} = hubberl_db:delete({subscription, Id}),
+	{atomic, ok} = hubberl_db:delete({subscription, DestinationName}),
 
 	_Deleted = struct:set_value(<<"status">>, deleted, S).
