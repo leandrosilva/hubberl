@@ -24,9 +24,9 @@ reset() ->
 	mnesia:create_table(counter, [{disc_copies, cluster_nodes()}, {attributes, record_info(fields, counter)}]),
 
 	% business tables
-	mnesia:create_table(destination, [{disc_copies, cluster_nodes()}, {attributes, record_info(fields, destination)}]),
-	mnesia:create_table(subscription, [{disc_copies, cluster_nodes()}, {attributes, record_info(fields, subscription)}]),
-	mnesia:create_table(message, [{disc_copies, cluster_nodes()}, {attributes, record_info(fields, message)}]).
+	mnesia:create_table(destination,  [{disc_copies, cluster_nodes()}, {type, set},         {attributes, record_info(fields, destination)}]),
+	mnesia:create_table(subscription, [{disc_copies, cluster_nodes()}, {type, bag},         {attributes, record_info(fields, subscription)}]),
+	mnesia:create_table(message,      [{disc_copies, cluster_nodes()}, {type, ordered_set}, {attributes, record_info(fields, message)}]).
 
 new_id(Key) ->
 	mnesia:dirty_update_counter({counter, Key}, 1).
