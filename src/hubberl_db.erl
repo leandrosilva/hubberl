@@ -21,7 +21,7 @@ reset() ->
 	mnesia:start(),
 
 	% table for ID generation
-	mnesia:create_table(counter, [{disc_copies, cluster_nodes()}, {attributes, record_info(fields, counter)}]),
+	mnesia:create_table(counter,      [{disc_copies, cluster_nodes()}, {type, set},         {attributes, record_info(fields, counter)}]),
 
 	% business tables
 	mnesia:create_table(destination,  [{disc_copies, cluster_nodes()}, {type, set},         {attributes, record_info(fields, destination)}]),
