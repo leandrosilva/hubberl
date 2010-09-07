@@ -40,7 +40,7 @@ handle_request('POST', _Path, Request, _DocRoot) ->
   Request:not_found();
 
 handle_request('PUT', _Path, Request, _DocRoot) ->
-  Request:not_found();
+  Request:respond({405, [{"Content-Type", "application/json"}], <<"Method Not Allowed.">>});
 
 handle_request('DELETE', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
   Input = struct:new("name", Name),

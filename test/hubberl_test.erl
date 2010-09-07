@@ -106,7 +106,16 @@ should_return_404_if_try_to_get_a_invalid_destination() ->
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
 should_not_accept_put() ->
-  ?assertMatch(yet_not_implemented, yet_not_implemented).
+  HttpMethod = put,
+  Headers = [],
+  ContentType = "application/x-www-form-urlencoded",
+  Body = "destination={\"name\":\"payments\", \"type\":\"queue\", \"description\":\"updating payments queue description\"}",
+  HttpOptions = [],
+  Options = [{body_format, string}],
+
+  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
+
+  ?assertMatch({ok, {{"HTTP/1.1", 405, "Method Not Allowed"}, _, _}}, HttpResponse).
 
 should_accept_delete_to_remove_a_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
