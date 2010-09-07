@@ -15,7 +15,7 @@
 create(S) ->
   case exists(S) of
     yes ->
-      _AlreadyExists = struct:set_value(<<"status">>, already_exists, S);
+      already_exists;
     no ->
       Name        = struct:get_value(<<"name">>, S),
       Type        = struct:get_value(<<"type">>, S),
@@ -23,14 +23,11 @@ create(S) ->
 
       {atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
 
-      _Created = struct:set_value(<<"status">>, created, S)
+      created
   end.
   
 exists(S) ->
-  Read   = read(S),
-  Status = struct:get_value(<<"status">>, Read),
-  
-  case Status of
+  case read(S) of
     not_found ->
       no;
     _ ->
@@ -49,7 +46,7 @@ read(S) ->
           {<<"description">>, R#destination.description}
         ]};
     [] ->
-      _NotFound = struct:set_value(<<"status">>, not_found, S)
+      not_found
   end.
   
 read_all() -> 
@@ -71,13 +68,23 @@ update(S) ->
   Type        = struct:get_value(<<"type">>, S),
   Description = struct:get_value(<<"description">>, S),
 
-  {atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
+  case exists(S) of
+    yes ->
+      {atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
 
-  _Updated = struct:set_value(<<"status">>, updated, S).
-
+      updated;
+    no ->
+      not_found
+  end.
+  
 delete(S) ->
   Name = struct:get_value(<<"name">>, S),
 
-  {atomic, ok} = hubberl_db:delete({destination, Name}),
+  case exists(S) of
+    yes ->
+      {atomic, ok} = hubberl_db:delete({destination, Name}),
 
-  _Deleted = struct:set_value(<<"status">>, deleted, S).
+      deleted;
+    no ->
+      not_found
+  end.

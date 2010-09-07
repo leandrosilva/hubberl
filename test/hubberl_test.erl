@@ -74,13 +74,10 @@ should_accept_post_to_create_a_destination() ->
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
   
-  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
-                     [_, _, _, {"content-type", "application/json"}],
-                     "{\"status\":\"created\",\"name\":\"payments\",\"type\":\"queue\",\"description\":\"payments queue\"}"}},
-               HttpResponse).
+  ?assertMatch({ok, {{"HTTP/1.1", 201, "Created"}, [_, _, _, {"content-type", "application/json"}], []}}, HttpResponse).
 
 should_return_404_if_try_to_create_a_invalid_resource() ->
-  HttpResponse = http:request(post, {?RESOURCE_URI ++ "_invalid", [], [], ""}, [], []),
+  HttpResponse = http:request(post, {?RESOURCE_URI ++ "/_invalid", [], [], ""}, [], []),
   
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
@@ -101,7 +98,7 @@ should_accept_get_to_retrieve_a_destination() ->
                HttpResponse).
 
 should_return_404_if_try_to_get_a_invalid_destination() ->
-  HttpResponse = http:request(?RESOURCE_URI ++ "_invalid"),
+  HttpResponse = http:request(?RESOURCE_URI ++ "/_invalid"),
   
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
@@ -125,11 +122,15 @@ should_accept_delete_to_remove_a_destination() ->
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI ++ "/payments", Headers}, HttpOptions, Options),
 
-  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
-                     [_, _, _, {"content-type", "application/json"}],
-                     "{\"status\":\"deleted\",\"name\":\"payments\"}"}},
-               HttpResponse).
+  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _, {"content-type", "application/json"}], []}}, HttpResponse).
   
 should_return_404_if_try_to_delete_a_invalid_destination() ->
-  ?assertMatch(yet_not_implemented, yet_not_implemented).
+  HttpMethod = delete,
+  Headers = [],
+  HttpOptions = [],
+  Options = [{body_format, string}],
+
+  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI ++ "/_invalid", Headers}, HttpOptions, Options),
+
+  ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
   
