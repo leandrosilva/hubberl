@@ -21,10 +21,10 @@ stop() ->
   mochiweb_http:stop(?MODULE).
 
 loop(Request, DocRoot) ->
-	Method = Request:get(method),
-	Path = Request:get(path),
-	
-	hubberl_log:log_request(Method, Path, DocRoot),
+  Method = Request:get(method),
+  Path = Request:get(path),
+  
+  hubberl_log:log_request(Method, Path, DocRoot),
 
   case Path of
     "/admin" ++ _ ->

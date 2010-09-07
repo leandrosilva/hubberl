@@ -13,63 +13,63 @@
 -include("records.hrl").
 
 create(S) ->
-	Id             = hubberl_db:new_id(message),
-	DestinationName = struct:get_value(<<"destination_name">>, S),
-	PublisherUri   = struct:get_value(<<"publisher_uri">>, S),
-	Content        = struct:get_value(<<"content">>, S),
-	
-	{atomic, ok} = hubberl_db:write({message, Id, DestinationName, PublisherUri, Content, not_yet}),
-	
-	New = struct:set_value(<<"id">>, Id),
-	
-	_Created = struct:set_value(<<"status">>, created, New).
+  Id             = hubberl_db:new_id(message),
+  DestinationName = struct:get_value(<<"destination_name">>, S),
+  PublisherUri   = struct:get_value(<<"publisher_uri">>, S),
+  Content        = struct:get_value(<<"content">>, S),
+  
+  {atomic, ok} = hubberl_db:write({message, Id, DestinationName, PublisherUri, Content, not_yet}),
+  
+  New = struct:set_value(<<"id">>, Id),
+  
+  _Created = struct:set_value(<<"status">>, created, New).
 
 read(S) ->
-	Id = struct:get_value(<<"id">>, S),
+  Id = struct:get_value(<<"id">>, S),
 
-	case hubberl_db:read({message, Id}) of
-		[R] ->
-			{struct,
-				[
-					{<<"id">>, R#message.id},
-				 	{<<"destination_name">>, R#message.destination_name},
-				 	{<<"publisher_uri">>, R#message.publisher_uri},
-				 	{<<"content">>, R#message.content},
-				 	{<<"delivered">>, R#message.delivered}
-				]};
-		[] ->
-			_NotFound = struct:set_value(<<"status">>, not_found, S)
-	end.
-	
+  case hubberl_db:read({message, Id}) of
+    [R] ->
+      {struct,
+        [
+          {<<"id">>, R#message.id},
+          {<<"destination_name">>, R#message.destination_name},
+          {<<"publisher_uri">>, R#message.publisher_uri},
+          {<<"content">>, R#message.content},
+          {<<"delivered">>, R#message.delivered}
+        ]};
+    [] ->
+      _NotFound = struct:set_value(<<"status">>, not_found, S)
+  end.
+  
 read_all() -> 
-	Messages = hubberl_db:read_all(message),
-	
-	F = fun(R) ->
-				{struct,
-					[
-						{<<"id">>, R#message.id},
-					 	{<<"destination_name">>, R#message.destination_name},
-					 	{<<"publisher_uri">>, R#message.publisher_uri},
-					 	{<<"content">>, R#message.content},
-					 	{<<"delivered">>, R#message.delivered}
-					]}
-	end,
-	
-	lists:map(F, Messages).
+  Messages = hubberl_db:read_all(message),
+  
+  F = fun(R) ->
+        {struct,
+          [
+            {<<"id">>, R#message.id},
+            {<<"destination_name">>, R#message.destination_name},
+            {<<"publisher_uri">>, R#message.publisher_uri},
+            {<<"content">>, R#message.content},
+            {<<"delivered">>, R#message.delivered}
+          ]}
+  end,
+  
+  lists:map(F, Messages).
 
 update(S) ->
-	Id             = struct:get_value(<<"id">>, S),
-	DestinationName = struct:get_value(<<"destination_name">>, S),
-	PublisherUri   = struct:get_value(<<"publisher_uri">>, S),
-	Content        = struct:get_value(<<"content">>, S),
-	
-	{atomic, ok} = hubberl_db:write({message, Id, DestinationName, PublisherUri, Content, not_yet}),
+  Id             = struct:get_value(<<"id">>, S),
+  DestinationName = struct:get_value(<<"destination_name">>, S),
+  PublisherUri   = struct:get_value(<<"publisher_uri">>, S),
+  Content        = struct:get_value(<<"content">>, S),
+  
+  {atomic, ok} = hubberl_db:write({message, Id, DestinationName, PublisherUri, Content, not_yet}),
 
-	_Updated = struct:set_value(<<"status">>, updated, S).
+  _Updated = struct:set_value(<<"status">>, updated, S).
 
 delete(S) ->
-	Id = struct:get_value(<<"id">>, S),
+  Id = struct:get_value(<<"id">>, S),
 
-	{atomic, ok} = hubberl_db:delete({message, Id}),
+  {atomic, ok} = hubberl_db:delete({message, Id}),
 
-	_Deleted = struct:set_value(<<"status">>, deleted, S).
+  _Deleted = struct:set_value(<<"status">>, deleted, S).

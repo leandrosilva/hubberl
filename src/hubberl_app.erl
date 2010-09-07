@@ -13,10 +13,10 @@
 %% @spec start(_Type, _StartArgs) -> ServerRet
 %% @doc application start callback for hubberl.
 start(_Type, _StartArgs) ->
-    hubberl_deps:ensure(),
-    hubberl_sup:start_link().
+  hubberl_deps:ensure(),
+  hubberl_sup:start_link().
 
 %% @spec stop(_State) -> ServerRet
 %% @doc application stop callback for hubberl.
 stop(_State) ->
-    ok.
+  ok.
