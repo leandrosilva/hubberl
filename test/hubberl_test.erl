@@ -67,7 +67,7 @@ after_all() ->
   ok.
 
 %%
-%% Scenary: when in admin mode
+%% Scenary: when in admin mode for destinations
 %%
 %% hubberl_web_adm module
 %%
@@ -153,6 +153,12 @@ should_return_404_if_try_to_delete_a_invalid_destination() ->
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI ++ "/_invalid", Headers}, HttpOptions, Options),
 
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
+
+%%
+%% Scenary: when in admin mode for subscriptions
+%%
+%% hubberl_web_adm module
+%%
   
 should_accept_post_to_create_a_subscription() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
