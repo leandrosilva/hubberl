@@ -101,7 +101,7 @@ should_accept_get_to_retrieve_a_destination() ->
                HttpResponse).
 
 should_return_404_if_try_to_get_a_invalid_destination() ->
-  HttpResponse = http:request(post, {?RESOURCE_URI ++ "_invalid", [], [], ""}, [], []),
+  HttpResponse = http:request(?RESOURCE_URI ++ "_invalid"),
   
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
