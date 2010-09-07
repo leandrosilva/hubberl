@@ -37,7 +37,7 @@ handle_request('GET', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
 
   case destinations:read(Input) of
     not_found ->
-      Request:respond({404, [], <<"Not Found">>});
+      Request:respond({404, [], []});
     Destination ->
       Output = struct:to_json(Destination),
       Request:respond({200, [{"Content-Type", "application/json"}], Output})
