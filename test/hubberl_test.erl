@@ -93,7 +93,12 @@ should_accept_get_to_list_all_destinations() ->
                AllDestinations).
 
 should_accept_get_to_retrieve_a_destination() ->
-  ?assertMatch(yet_not_implemented, yet_not_implemented).
+  PaymentsDestination = http:request(?RESOURCE_URI ++ "/payments"),
+
+  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
+                     [_, _, _, {"content-type", "application/json"}],
+                     "{\"name\":\"payments\",\"type\":\"queue\",\"description\":\"payments queue\"}"}},
+               PaymentsDestination).
 
 should_return_404_if_try_to_get_a_invalid_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
