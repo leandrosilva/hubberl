@@ -23,8 +23,10 @@ describe_hubberl_test_() ->
         [
           {"should accept POST on /admin/destinations to create a destination",
             fun should_accept_post_to_create_a_destination/0},
-          {"should return 404 on /admin/destinations if try to create a invalid resource",
-            fun should_return_404_if_try_to_create_a_invalid_resource/0},
+          {"should return 200 on /admin/destinations if try to POST a exitent destination",
+            fun should_return_200_if_try_to_post_a_existent_destination/0},
+          {"should return 404 on /admin/destinations if try to POST a invalid resource",
+            fun should_return_404_if_try_to_post_a_invalid_resource/0},
           {"should accept GET on /admin/destinations to list all destinations",
             fun should_accept_get_to_list_all_destinations/0},
           {"should accept GET on /admin/destinations/{name} to retrieve a destination",
@@ -74,9 +76,21 @@ should_accept_post_to_create_a_destination() ->
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
   
-  ?assertMatch({ok, {{"HTTP/1.1", 201, "Created"}, [_, _, _, {"content-type", "application/json"}], []}}, HttpResponse).
+  ?assertMatch({ok, {{"HTTP/1.1", 201, "Created"}, [_, {"location", "/admin/destinations/payments"}, _, _], []}}, HttpResponse).
 
-should_return_404_if_try_to_create_a_invalid_resource() ->
+should_return_200_if_try_to_post_a_existent_destination() ->
+  HttpMethod = post,
+  Headers = [],
+  ContentType = "application/x-www-form-urlencoded",
+  Body = "destination={\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
+  HttpOptions = [],
+  Options = [{body_format, string}],
+
+  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
+  
+  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], []}}, HttpResponse).
+
+should_return_404_if_try_to_post_a_invalid_resource() ->
   HttpResponse = http:request(post, {?RESOURCE_URI ++ "/_invalid", [], [], ""}, [], []),
   
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
@@ -112,7 +126,7 @@ should_not_accept_put() ->
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
 
-  ?assertMatch({ok, {{"HTTP/1.1", 405, "Method Not Allowed"}, _, _}}, HttpResponse).
+  ?assertMatch({ok, {{"HTTP/1.1", 501, "Not Implemented"}, _, _}}, HttpResponse).
 
 should_accept_delete_to_remove_a_destination() ->
   HttpMethod = delete,
@@ -122,7 +136,7 @@ should_accept_delete_to_remove_a_destination() ->
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI ++ "/payments", Headers}, HttpOptions, Options),
 
-  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _, {"content-type", "application/json"}], []}}, HttpResponse).
+  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], []}}, HttpResponse).
   
 should_return_404_if_try_to_delete_a_invalid_destination() ->
   HttpMethod = delete,

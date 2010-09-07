@@ -16,9 +16,11 @@ handle_request('POST', "/admin/destinations", Request, _DocRoot) ->
   
   case destinations:create(Input) of
     already_exists ->
-      Request:respond({200, [{"Content-Type", "application/json"}], <<"Already Exists">>});
+      Request:respond({200, [], []});
     created ->
-      Request:respond({201, [{"Content-Type", "application/json"}], []})
+      Name = struct:get_value(<<"name">>, Input),
+
+      Request:respond({201, [{"Location", "/admin/destinations/" ++ Name}], []})
   end;
 
 handle_request('POST', _Path, Request, _DocRoot) ->
@@ -35,7 +37,7 @@ handle_request('GET', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
 
   case destinations:read(Input) of
     not_found ->
-      Request:respond({404, [{"Content-Type", "application/json"}], <<"Not Found">>});
+      Request:respond({404, [], <<"Not Found">>});
     Destination ->
       Output = struct:to_json(Destination),
       Request:respond({200, [{"Content-Type", "application/json"}], Output})
@@ -44,17 +46,14 @@ handle_request('GET', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
 handle_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
 
-handle_request('PUT', _Path, Request, _DocRoot) ->
-  Request:respond({405, [{"Content-Type", "application/json"}], <<"Method Not Allowed.">>});
-
 handle_request('DELETE', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
   Input = struct:new("name", Name),
 
   case destinations:delete(Input) of
     not_found ->
-      Request:respond({404, [{"Content-Type", "application/json"}], <<"Not Found">>});
+      Request:respond({404, [], []});
     deleted ->
-      Request:respond({200, [{"Content-Type", "application/json"}], []})
+      Request:respond({200, [], []})
   end;
 
 handle_request('DELETE', _Path, Request, _DocRoot) ->
