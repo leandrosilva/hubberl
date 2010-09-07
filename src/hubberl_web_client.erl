@@ -10,10 +10,10 @@
 
 %% External API
 
-handle_request('GET', _Path, Request, _DocRoot) ->
+handle_request('POST', _Path, Request, _DocRoot) ->
   Request:not_found();
 
-handle_request('POST', _Path, Request, _DocRoot) ->
+handle_request('GET', _Path, Request, _DocRoot) ->
   Request:not_found();
 
 handle_request('PUT', _Path, Request, _DocRoot) ->
