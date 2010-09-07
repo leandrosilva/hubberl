@@ -85,23 +85,25 @@ should_return_404_if_try_to_create_a_invalid_resource() ->
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
 should_accept_get_to_list_all_destinations() ->
-  AllDestinations = http:request(?RESOURCE_URI),
+  HttpResponse = http:request(?RESOURCE_URI),
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
                      [_, _, _, {"content-type", "application/json"}],
                      "[{\"name\":\"payments\",\"type\":\"queue\",\"description\":\"payments queue\"}]"}},
-               AllDestinations).
+               HttpResponse).
 
 should_accept_get_to_retrieve_a_destination() ->
-  PaymentsDestination = http:request(?RESOURCE_URI ++ "/payments"),
+  HttpResponse = http:request(?RESOURCE_URI ++ "/payments"),
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
                      [_, _, _, {"content-type", "application/json"}],
                      "{\"name\":\"payments\",\"type\":\"queue\",\"description\":\"payments queue\"}"}},
-               PaymentsDestination).
+               HttpResponse).
 
 should_return_404_if_try_to_get_a_invalid_destination() ->
-  ?assertMatch(yet_not_implemented, yet_not_implemented).
+  HttpResponse = http:request(post, {?RESOURCE_URI ++ "_invalid", [], [], ""}, [], []),
+  
+  ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
 should_not_accept_put() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
