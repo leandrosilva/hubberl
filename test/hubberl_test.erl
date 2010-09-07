@@ -118,8 +118,18 @@ should_not_accept_put() ->
   ?assertMatch({ok, {{"HTTP/1.1", 405, "Method Not Allowed"}, _, _}}, HttpResponse).
 
 should_accept_delete_to_remove_a_destination() ->
-  ?assertMatch(yet_not_implemented, yet_not_implemented).
+  HttpMethod = delete,
+  Headers = [],
+  HttpOptions = [],
+  Options = [{body_format, string}],
 
+  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI ++ "/payments", Headers}, HttpOptions, Options),
+
+  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
+                     [_, _, _, {"content-type", "application/json"}],
+                     "{\"status\":\"deleted\",\"name\":\"payments\"}"}},
+               HttpResponse).
+  
 should_return_404_if_try_to_delete_a_invalid_destination() ->
   ?assertMatch(yet_not_implemented, yet_not_implemented).
   
