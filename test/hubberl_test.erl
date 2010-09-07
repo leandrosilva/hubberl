@@ -19,7 +19,7 @@ describe_hubberl_test_() ->
       {"before tests",
         {setup, fun before_all/0, []}},
         
-      {"when in admin mode",
+      {"when in admin mode for destinations",
         [
           {"should accept POST on /admin/destinations to create a destination",
             fun should_accept_post_to_create_a_destination/0},
@@ -39,6 +39,12 @@ describe_hubberl_test_() ->
             fun should_accept_delete_to_remove_a_destination/0},
           {"should return 404 on /admin/destinations/{name} if try to DELETE a invalid destination",
             fun should_return_404_if_try_to_delete_a_invalid_destination/0}
+        ]},
+
+      {"when in admin mode for subscription",
+        [
+          {"should accept POST on /admin/subscriptions to create a subscription",
+            fun should_accept_post_to_create_a_subscription/0}
         ]},
               
       {"after tests",
@@ -148,3 +154,5 @@ should_return_404_if_try_to_delete_a_invalid_destination() ->
 
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
   
+should_accept_post_to_create_a_subscription() ->
+  ?assertMatch(yet_not_implemented, yet_not_implemented).
