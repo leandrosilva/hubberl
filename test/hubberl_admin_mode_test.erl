@@ -23,30 +23,38 @@ describe_hubberl_test_() ->
         [
           {"should accept POST on /admin/destinations to create a destination",
             fun should_accept_post_to_create_a_destination/0},
+              
           {"should return 200 on /admin/destinations if try to POST a exitent destination",
             fun should_return_200_if_try_to_post_a_existent_destination/0},
+              
           {"should return 404 on /admin/destinations if try to POST a invalid resource",
             fun should_return_404_if_try_to_post_a_invalid_resource/0},
+              
           {"should accept GET on /admin/destinations to list all destinations",
             fun should_accept_get_to_list_all_destinations/0},
+              
           {"should accept GET on /admin/destinations/{name} to retrieve a destination",
             fun should_accept_get_to_retrieve_a_destination/0},
+              
           {"should return 404 on /admin/destinations/{name} if try to GET a invalid destination",
             fun should_return_404_if_try_to_get_a_invalid_destination/0},
+              
           {"should not accept PUT on /admin/destinations",
             fun should_not_accept_put/0},
+
+          {"should manage its subscriptions",
+            [
+              {"should accept POST on /admin/subscriptions to create a subscription",
+                fun should_accept_post_to_create_a_subscription/0}
+            ]},
+
           {"should accept DELETE on /admin/destinations/{name} to remove a destination",
             fun should_accept_delete_to_remove_a_destination/0},
+              
           {"should return 404 on /admin/destinations/{name} if try to DELETE a invalid destination",
             fun should_return_404_if_try_to_delete_a_invalid_destination/0}
         ]},
 
-      {"when in admin mode for subscription",
-        [
-          {"should accept POST on /admin/subscriptions to create a subscription",
-            fun should_accept_post_to_create_a_subscription/0}
-        ]},
-              
       {"after all tests",
         {setup, fun after_all/0, []}}
     ]}.
@@ -134,7 +142,22 @@ should_not_accept_put() ->
   HttpResponse = httpc:request(HttpMethod, {?DESTINATIONS_URI, Headers, ContentType, Body}, HttpOptions, Options),
 
   ?assertMatch({ok, {{"HTTP/1.1", 501, "Not Implemented"}, _, _}}, HttpResponse).
+  
+should_accept_post_to_create_a_subscription() ->
+  % HttpMethod = post,
+  % Uri = ?DESTINATIONS_URI ++ "/payments/subscriptions",
+  % Headers = [],
+  % ContentType = "application/json",
+  % Body = "{\"destination_name\":\"payments\", \"subscriber_uri\":\"http://payments_consumer\"}",
+  % HttpOptions = [],
+  % Options = [{body_format, string}],
+  % 
+  % HttpResponse = httpc:request(HttpMethod, {Uri, Headers, ContentType, Body}, HttpOptions, Options),
+  % 
+  % ?assertMatch({ok, {{"HTTP/1.1", 201, "Created"}, [_, {"location", "/admin/destinations/payments"}, _, _], []}}, HttpResponse),
 
+  ?assertMatch(yet_not_implemented, yet_not_implemented).
+  
 should_accept_delete_to_remove_a_destination() ->
   HttpMethod = delete,
   Headers = [],
@@ -155,12 +178,4 @@ should_return_404_if_try_to_delete_a_invalid_destination() ->
   HttpResponse = httpc:request(HttpMethod, {?DESTINATIONS_URI ++ "/_invalid", Headers}, HttpOptions, Options),
 
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
-
-%%
-%% Scenary: when in admin mode for subscriptions
-%%
-%% hubberl_web_adm module
-%%
   
-should_accept_post_to_create_a_subscription() ->
-  ?assertMatch(yet_not_implemented, yet_not_implemented).
