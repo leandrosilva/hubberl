@@ -11,8 +11,8 @@
 %% External API
 
 handle_request('POST', "/admin/destinations", Request, _DocRoot) ->
-  Data = Request:parse_post(),
-  Input = struct:from_json("destination", Data),
+  Body = Request:recv_body(),
+  Input = struct:from_json(Body),
   
   case destinations:create(Input) of
     already_exists ->

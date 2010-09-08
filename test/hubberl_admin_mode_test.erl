@@ -75,8 +75,8 @@ after_all() ->
 should_accept_post_to_create_a_destination() ->
   HttpMethod = post,
   Headers = [],
-  ContentType = "application/x-www-form-urlencoded",
-  Body = "destination={\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
+  ContentType = "application/json",
+  Body = "{\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
   HttpOptions = [],
   Options = [{body_format, string}],
 
@@ -88,8 +88,8 @@ should_accept_post_to_create_a_destination() ->
 should_return_200_if_try_to_post_a_existent_destination() ->
   HttpMethod = post,
   Headers = [],
-  ContentType = "application/x-www-form-urlencoded",
-  Body = "destination={\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
+  ContentType = "application/json",
+  Body = "{\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
   HttpOptions = [],
   Options = [{body_format, string}],
 
@@ -126,8 +126,8 @@ should_return_404_if_try_to_get_a_invalid_destination() ->
 should_not_accept_put() ->
   HttpMethod = put,
   Headers = [],
-  ContentType = "application/x-www-form-urlencoded",
-  Body = "destination={\"name\":\"payments\", \"type\":\"queue\", \"description\":\"updating payments queue description\"}",
+  ContentType = "application/json",
+  Body = "{\"name\":\"payments\", \"type\":\"queue\", \"description\":\"updating payments queue description\"}",
   HttpOptions = [],
   Options = [{body_format, string}],
 
