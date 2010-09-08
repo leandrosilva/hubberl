@@ -12,6 +12,8 @@
 
 -include("records.hrl").
 
+%% External API
+
 create(S) ->
   case exists(S) of
     yes ->
@@ -22,6 +24,10 @@ create(S) ->
       Description = struct:get_value(<<"description">>, S),
 
       {atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
+      
+      TableName = list_to_atom(binary_to_list(Name) ++ "_" ++ binary_to_list(Type)),
+      
+      {atomic, ok} = hubberl_db:create_table(TableName, {type, ordered_set}, {attributes, record_info(fields, message)}),
 
       created
   end.

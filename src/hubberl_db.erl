@@ -30,9 +30,10 @@ reset() ->
   create_table(counter, {type, set}, {attributes, record_info(fields, counter)}),
 
   % business tables
-  create_table(destination,  {type, set},         {attributes, record_info(fields, destination)}),
-  create_table(subscription, {type, bag},         {attributes, record_info(fields, subscription)}),
-  create_table(message,      {type, ordered_set}, {attributes, record_info(fields, message)}).
+  create_table(destination, {type, set}, {attributes, record_info(fields, destination)}),
+  create_table(subscription, {type, bag}, {attributes, record_info(fields, subscription)}),
+  
+  ok.
 
 %%
 %% Table definition
