@@ -7,7 +7,7 @@
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
 -export([reset/0]).
--export([create_table/3, drop_table/1]).
+-export([create_table/3, delete_table/1]).
 -export([new_id/1, write/1, read/1, read_all/1, delete/1]).
 
 -include_lib("stdlib/include/qlc.hrl").
@@ -41,7 +41,7 @@ reset() ->
 create_table(Name, Type, Attributes) ->
   mnesia:create_table(Name,  [{disc_copies, cluster_nodes()}, Type, Attributes]).
   
-drop_table(Name) ->
+delete_table(Name) ->
   mnesia:delete_table(Name).
 
 %%
