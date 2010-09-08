@@ -20,10 +20,9 @@ create(S) ->
       already_exists;
     no ->
       Name        = struct:get_value(<<"name">>, S),
-      Type        = struct:get_value(<<"type">>, S),
       Description = struct:get_value(<<"description">>, S),
 
-      {atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
+      {atomic, ok} = hubberl_db:write({destination, Name, Description}),
       
       TableName = exclusive_table_name(Name),
       {atomic, ok} = hubberl_db:create_table(TableName, {type, ordered_set}, {attributes, record_info(fields, message)}),
@@ -47,7 +46,6 @@ read(S) ->
       {struct,
         [
           {<<"name">>, R#destination.name},
-          {<<"type">>, R#destination.type},
           {<<"description">>, R#destination.description}
         ]};
     [] ->
@@ -61,7 +59,6 @@ read_all() ->
         {struct,
           [
             {<<"name">>, R#destination.name},
-            {<<"type">>, R#destination.type},
             {<<"description">>, R#destination.description}
           ]}
   end,
@@ -72,10 +69,9 @@ update(S) ->
   case exists(S) of
     yes ->
       Name        = struct:get_value(<<"name">>, S),
-      Type        = struct:get_value(<<"type">>, S),
       Description = struct:get_value(<<"description">>, S),
 
-      {atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
+      {atomic, ok} = hubberl_db:write({destination, Name, Description}),
 
       updated;
     no ->

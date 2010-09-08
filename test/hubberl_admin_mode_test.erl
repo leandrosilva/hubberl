@@ -76,7 +76,7 @@ should_accept_post_to_create_a_destination() ->
   HttpMethod = post,
   Headers = [],
   ContentType = "application/json",
-  Body = "{\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
+  Body = "{\"name\":\"payments\", \"description\":\"payments queue\"}",
   HttpOptions = [],
   Options = [{body_format, string}],
 
@@ -89,7 +89,7 @@ should_return_200_if_try_to_post_a_existent_destination() ->
   HttpMethod = post,
   Headers = [],
   ContentType = "application/json",
-  Body = "{\"name\":\"payments\", \"type\":\"queue\", \"description\":\"payments queue\"}",
+  Body = "{\"name\":\"payments\", \"description\":\"payments queue\"}",
   HttpOptions = [],
   Options = [{body_format, string}],
 
@@ -107,7 +107,7 @@ should_accept_get_to_list_all_destinations() ->
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
                      [_, _, _, {"content-type", "application/json"}],
-                     "[{\"name\":\"payments\",\"type\":\"queue\",\"description\":\"payments queue\"}]"}},
+                     "[{\"name\":\"payments\",\"description\":\"payments queue\"}]"}},
                HttpResponse).
 
 should_accept_get_to_retrieve_a_destination() ->
@@ -115,7 +115,7 @@ should_accept_get_to_retrieve_a_destination() ->
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
                      [_, _, _, {"content-type", "application/json"}],
-                     "{\"name\":\"payments\",\"type\":\"queue\",\"description\":\"payments queue\"}"}},
+                     "{\"name\":\"payments\",\"description\":\"payments queue\"}"}},
                HttpResponse).
 
 should_return_404_if_try_to_get_a_invalid_destination() ->
@@ -127,7 +127,7 @@ should_not_accept_put() ->
   HttpMethod = put,
   Headers = [],
   ContentType = "application/json",
-  Body = "{\"name\":\"payments\", \"type\":\"queue\", \"description\":\"updating payments queue description\"}",
+  Body = "{\"name\":\"payments\", \"description\":\"updating payments queue description\"}",
   HttpOptions = [],
   Options = [{body_format, string}],
 
