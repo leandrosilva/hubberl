@@ -25,8 +25,7 @@ create(S) ->
 
       {atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
       
-      TableName = list_to_atom(binary_to_list(Name) ++ "_" ++ binary_to_list(Type)),
-      
+      TableName = exclusive_table_name(Name),
       {atomic, ok} = hubberl_db:create_table(TableName, {type, ordered_set}, {attributes, record_info(fields, message)}),
 
       created
@@ -70,12 +69,12 @@ read_all() ->
   lists:map(F, Destinations).
 
 update(S) ->
-  Name        = struct:get_value(<<"name">>, S),
-  Type        = struct:get_value(<<"type">>, S),
-  Description = struct:get_value(<<"description">>, S),
-
   case exists(S) of
     yes ->
+      Name        = struct:get_value(<<"name">>, S),
+      Type        = struct:get_value(<<"type">>, S),
+      Description = struct:get_value(<<"description">>, S),
+
       {atomic, ok} = hubberl_db:write({destination, Name, Type, Description}),
 
       updated;
@@ -84,13 +83,20 @@ update(S) ->
   end.
   
 delete(S) ->
-  Name = struct:get_value(<<"name">>, S),
-
   case exists(S) of
     yes ->
+      Name = struct:get_value(<<"name">>, S),
       {atomic, ok} = hubberl_db:delete({destination, Name}),
+
+      TableName = exclusive_table_name(Name),
+      {atomic, ok} = hubberl_db:delete_table(TableName),
 
       deleted;
     no ->
       not_found
   end.
+  
+%% Internal API
+
+exclusive_table_name(Name) ->
+  list_to_atom(binary_to_list(Name) ++ "_destination").
