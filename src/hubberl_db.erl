@@ -86,7 +86,7 @@ delete(Rid) ->
 %% Internal API
 
 cluster_nodes() ->
-  [node()].
+  [node() | nodes()].
 
 transaction(F) ->
   case mnesia:transaction(F) of

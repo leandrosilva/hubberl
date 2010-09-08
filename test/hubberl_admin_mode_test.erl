@@ -80,7 +80,7 @@ should_accept_post_to_create_a_destination() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
   
   ?assertMatch({ok, {{"HTTP/1.1", 201, "Created"}, [_, {"location", "/admin/destinations/payments"}, _, _], []}}, HttpResponse),
   ?assertMatch(yes, hubberl_db:table_exists(payments_destination)).
@@ -93,17 +93,17 @@ should_return_200_if_try_to_post_a_existent_destination() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
   
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], "Object Already Exists"}}, HttpResponse).
 
 should_return_404_if_try_to_post_a_invalid_resource() ->
-  HttpResponse = http:request(post, {?RESOURCE_URI ++ "/_invalid", [], [], ""}, [], []),
+  HttpResponse = httpc:request(post, {?RESOURCE_URI ++ "/_invalid", [], [], ""}, [], []),
   
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
 should_accept_get_to_list_all_destinations() ->
-  HttpResponse = http:request(?RESOURCE_URI),
+  HttpResponse = httpc:request(?RESOURCE_URI),
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
                      [_, _, _, {"content-type", "application/json"}],
@@ -111,7 +111,7 @@ should_accept_get_to_list_all_destinations() ->
                HttpResponse).
 
 should_accept_get_to_retrieve_a_destination() ->
-  HttpResponse = http:request(?RESOURCE_URI ++ "/payments"),
+  HttpResponse = httpc:request(?RESOURCE_URI ++ "/payments"),
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
                      [_, _, _, {"content-type", "application/json"}],
@@ -119,7 +119,7 @@ should_accept_get_to_retrieve_a_destination() ->
                HttpResponse).
 
 should_return_404_if_try_to_get_a_invalid_destination() ->
-  HttpResponse = http:request(?RESOURCE_URI ++ "/_invalid"),
+  HttpResponse = httpc:request(?RESOURCE_URI ++ "/_invalid"),
   
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
@@ -131,7 +131,7 @@ should_not_accept_put() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
 
   ?assertMatch({ok, {{"HTTP/1.1", 501, "Not Implemented"}, _, _}}, HttpResponse).
 
@@ -141,7 +141,7 @@ should_accept_delete_to_remove_a_destination() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI ++ "/payments", Headers}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI ++ "/payments", Headers}, HttpOptions, Options),
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], []}}, HttpResponse),
   ?assertMatch(no, hubberl_db:table_exists(payments_destination)).
@@ -152,7 +152,7 @@ should_return_404_if_try_to_delete_a_invalid_destination() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = http:request(HttpMethod, {?RESOURCE_URI ++ "/_invalid", Headers}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI ++ "/_invalid", Headers}, HttpOptions, Options),
 
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
