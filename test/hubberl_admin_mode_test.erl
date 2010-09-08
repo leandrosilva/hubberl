@@ -16,7 +16,7 @@
 describe_hubberl_test_() ->
   {"hubberl",
     [
-      {"before tests",
+      {"before all tests",
         {setup, fun before_all/0, []}},
         
       {"when in admin mode for destinations",
@@ -47,7 +47,7 @@ describe_hubberl_test_() ->
             fun should_accept_post_to_create_a_subscription/0}
         ]},
               
-      {"after tests",
+      {"after all tests",
         {setup, fun after_all/0, []}}
     ]}.
 
@@ -55,7 +55,7 @@ describe_hubberl_test_() ->
 %% Setup
 %%
 
--define(RESOURCE_URI, "http://localhost:8000/admin/destinations").
+-define(DESTINATIONS_URI, "http://localhost:8000/admin/destinations").
 
 before_all() ->
   hubberl_db:reset(),
@@ -80,7 +80,7 @@ should_accept_post_to_create_a_destination() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?DESTINATIONS_URI, Headers, ContentType, Body}, HttpOptions, Options),
   
   ?assertMatch({ok, {{"HTTP/1.1", 201, "Created"}, [_, {"location", "/admin/destinations/payments"}, _, _], []}}, HttpResponse),
   ?assertMatch(yes, hubberl_db:table_exists(payments_destination)).
@@ -93,17 +93,17 @@ should_return_200_if_try_to_post_a_existent_destination() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?DESTINATIONS_URI, Headers, ContentType, Body}, HttpOptions, Options),
   
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], "Object Already Exists"}}, HttpResponse).
 
 should_return_404_if_try_to_post_a_invalid_resource() ->
-  HttpResponse = httpc:request(post, {?RESOURCE_URI ++ "/_invalid", [], [], ""}, [], []),
+  HttpResponse = httpc:request(post, {?DESTINATIONS_URI ++ "/_invalid", [], [], ""}, [], []),
   
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
 should_accept_get_to_list_all_destinations() ->
-  HttpResponse = httpc:request(?RESOURCE_URI),
+  HttpResponse = httpc:request(?DESTINATIONS_URI),
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
                      [_, _, _, {"content-type", "application/json"}],
@@ -111,7 +111,7 @@ should_accept_get_to_list_all_destinations() ->
                HttpResponse).
 
 should_accept_get_to_retrieve_a_destination() ->
-  HttpResponse = httpc:request(?RESOURCE_URI ++ "/payments"),
+  HttpResponse = httpc:request(?DESTINATIONS_URI ++ "/payments"),
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"},
                      [_, _, _, {"content-type", "application/json"}],
@@ -119,7 +119,7 @@ should_accept_get_to_retrieve_a_destination() ->
                HttpResponse).
 
 should_return_404_if_try_to_get_a_invalid_destination() ->
-  HttpResponse = httpc:request(?RESOURCE_URI ++ "/_invalid"),
+  HttpResponse = httpc:request(?DESTINATIONS_URI ++ "/_invalid"),
   
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
@@ -131,7 +131,7 @@ should_not_accept_put() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?DESTINATIONS_URI, Headers, ContentType, Body}, HttpOptions, Options),
 
   ?assertMatch({ok, {{"HTTP/1.1", 501, "Not Implemented"}, _, _}}, HttpResponse).
 
@@ -141,7 +141,7 @@ should_accept_delete_to_remove_a_destination() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI ++ "/payments", Headers}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?DESTINATIONS_URI ++ "/payments", Headers}, HttpOptions, Options),
 
   ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], []}}, HttpResponse),
   ?assertMatch(no, hubberl_db:table_exists(payments_destination)).
@@ -152,7 +152,7 @@ should_return_404_if_try_to_delete_a_invalid_destination() ->
   HttpOptions = [],
   Options = [{body_format, string}],
 
-  HttpResponse = httpc:request(HttpMethod, {?RESOURCE_URI ++ "/_invalid", Headers}, HttpOptions, Options),
+  HttpResponse = httpc:request(HttpMethod, {?DESTINATIONS_URI ++ "/_invalid", Headers}, HttpOptions, Options),
 
   ?assertMatch({ok, {{"HTTP/1.1", 404, "Object Not Found"}, _, _}}, HttpResponse).
 
