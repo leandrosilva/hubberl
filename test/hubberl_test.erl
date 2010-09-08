@@ -82,7 +82,8 @@ should_accept_post_to_create_a_destination() ->
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
   
-  ?assertMatch({ok, {{"HTTP/1.1", 201, "Created"}, [_, {"location", "/admin/destinations/payments"}, _, _], []}}, HttpResponse).
+  ?assertMatch({ok, {{"HTTP/1.1", 201, "Created"}, [_, {"location", "/admin/destinations/payments"}, _, _], []}}, HttpResponse),
+  ?assertMatch(yes, hubberl_db:table_exists(payments_destination)).
 
 should_return_200_if_try_to_post_a_existent_destination() ->
   HttpMethod = post,
@@ -142,7 +143,8 @@ should_accept_delete_to_remove_a_destination() ->
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI ++ "/payments", Headers}, HttpOptions, Options),
 
-  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], []}}, HttpResponse).
+  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], []}}, HttpResponse),
+  ?assertMatch(no, hubberl_db:table_exists(payments_destination)).
   
 should_return_404_if_try_to_delete_a_invalid_destination() ->
   HttpMethod = delete,

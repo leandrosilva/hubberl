@@ -7,7 +7,7 @@
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
 -export([reset/0]).
--export([create_table/3, delete_table/1]).
+-export([create_table/3, delete_table/1, table_exists/1]).
 -export([new_id/1, write/1, read/1, read_all/1, delete/1]).
 
 -include_lib("stdlib/include/qlc.hrl").
@@ -44,7 +44,16 @@ create_table(Name, Type, Attributes) ->
   
 delete_table(Name) ->
   mnesia:delete_table(Name).
-
+  
+table_exists(Name) ->
+  try (mnesia:table_info(Name, type)) of
+    _ ->
+      yes
+  catch
+    _:_ -> 
+      no
+  end.
+  
 %%
 %% Record manipulation
 %%
