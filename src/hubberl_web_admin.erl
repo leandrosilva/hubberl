@@ -24,7 +24,7 @@ handle_request('POST', "/admin/destinations", Request, _DocRoot) ->
   end;
 
 handle_request('POST', _Path, Request, _DocRoot) ->
-  Request:not_found();
+  Request:respond({404, [], []});
 
 handle_request('GET', "/admin/destinations", Request, _DocRoot) ->
   Destinations = destinations:read_all(),
@@ -44,7 +44,7 @@ handle_request('GET', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
   end;
 
 handle_request('GET', _Path, Request, _DocRoot) ->
-  Request:not_found();
+  Request:respond({404, [], []});
 
 handle_request('DELETE', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
   Input = struct:new("name", Name),
@@ -57,7 +57,7 @@ handle_request('DELETE', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
   end;
 
 handle_request('DELETE', _Path, Request, _DocRoot) ->
-  Request:not_found();
+  Request:respond({404, [], []});
 
 handle_request(_Method, _Path, Request, _DocRoot) ->
   Request:respond({501, [], []}).
