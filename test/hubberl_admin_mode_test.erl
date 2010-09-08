@@ -1,9 +1,9 @@
 %% @author Leandro Silva <leandrodoze@gmail.com>
 %% @copyright 2009 Leandro Silva.
 
-%% @doc test module for hubberl.
+%% @doc test module for hubberl (when in admin mode).
 
--module(hubberl_test).
+-module(hubberl_admin_mode_test).
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
 -include("records.hrl").
