@@ -94,7 +94,7 @@ should_return_200_if_try_to_post_a_existent_destination() ->
 
   HttpResponse = http:request(HttpMethod, {?RESOURCE_URI, Headers, ContentType, Body}, HttpOptions, Options),
   
-  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], []}}, HttpResponse).
+  ?assertMatch({ok, {{"HTTP/1.1", 200, "OK"}, [_, _, _], "Object Already Exists"}}, HttpResponse).
 
 should_return_404_if_try_to_post_a_invalid_resource() ->
   HttpResponse = http:request(post, {?RESOURCE_URI ++ "/_invalid", [], [], ""}, [], []),

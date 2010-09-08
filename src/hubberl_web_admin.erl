@@ -16,7 +16,7 @@ handle_request('POST', "/admin/destinations", Request, _DocRoot) ->
   
   case destinations:create(Input) of
     already_exists ->
-      Request:respond({200, [], []});
+      Request:respond({200, [], "Object Already Exists"});
     created ->
       Name = struct:get_value(<<"name">>, Input),
 
