@@ -6,13 +6,19 @@
 -module(hubberl_db).
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
--export([reset/0, new_id/1, write/1, read/1, read_all/1, delete/1]).
+-export([reset/0]).
+-export([create_table/3, drop_table/1]).
+-export([new_id/1, write/1, read/1, read_all/1, delete/1]).
 
 -include_lib("stdlib/include/qlc.hrl").
 
 -include("records.hrl").
 
 %% External API
+
+%%
+%% Reset database schema
+%%
 
 reset() ->
   mnesia:stop(),
@@ -21,12 +27,26 @@ reset() ->
   mnesia:start(),
 
   % table for ID generation
-  mnesia:create_table(counter,      [{disc_copies, cluster_nodes()}, {type, set},         {attributes, record_info(fields, counter)}]),
+  create_table(counter, {type, set}, {attributes, record_info(fields, counter)}),
 
   % business tables
-  mnesia:create_table(destination,  [{disc_copies, cluster_nodes()}, {type, set},         {attributes, record_info(fields, destination)}]),
-  mnesia:create_table(subscription, [{disc_copies, cluster_nodes()}, {type, bag},         {attributes, record_info(fields, subscription)}]),
-  mnesia:create_table(message,      [{disc_copies, cluster_nodes()}, {type, ordered_set}, {attributes, record_info(fields, message)}]).
+  create_table(destination,  {type, set},         {attributes, record_info(fields, destination)}),
+  create_table(subscription, {type, bag},         {attributes, record_info(fields, subscription)}),
+  create_table(message,      {type, ordered_set}, {attributes, record_info(fields, message)}).
+
+%%
+%% Table definition
+%%
+
+create_table(Name, Type, Attributes) ->
+  mnesia:create_table(Name,  [{disc_copies, cluster_nodes()}, Type, Attributes]).
+  
+drop_table(Name) ->
+  mnesia:delete_table(Name).
+
+%%
+%% Record manipulation
+%%
 
 new_id(Key) ->
   mnesia:dirty_update_counter({counter, Key}, 1).
