@@ -24,7 +24,7 @@ handle_request('POST', "/admin/destinations", Request, _DocRoot) ->
   end;
 
 handle_request('POST', _Path, Request, _DocRoot) ->
-  Request:respond({404, [], []});
+  Request:respond({404});
 
 handle_request('GET', "/admin/destinations", Request, _DocRoot) ->
   Destinations = destinations:read_all(),
@@ -37,27 +37,27 @@ handle_request('GET', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
 
   case destinations:read(Input) of
     not_found ->
-      Request:respond({404, [], []});
+      Request:respond({404});
     Destination ->
       Output = struct:to_json(Destination),
       Request:respond({200, [{"Content-Type", "application/json"}], Output})
   end;
 
 handle_request('GET', _Path, Request, _DocRoot) ->
-  Request:respond({404, [], []});
+  Request:respond({404});
 
 handle_request('DELETE', "/admin/destinations/" ++ Name, Request, _DocRoot) ->
   Input = struct:new("name", Name),
 
   case destinations:delete(Input) of
     not_found ->
-      Request:respond({404, [], []});
+      Request:respond({404});
     deleted ->
-      Request:respond({200, [], []})
+      Request:respond({200})
   end;
 
 handle_request('DELETE', _Path, Request, _DocRoot) ->
-  Request:respond({404, [], []});
+  Request:respond({404});
 
 handle_request(_Method, _Path, Request, _DocRoot) ->
-  Request:respond({501, [], []}).
+  Request:respond({501}).
