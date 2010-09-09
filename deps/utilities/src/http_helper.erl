@@ -1,14 +1,21 @@
 %% @author Leandro Silva <leandrodoze@gmail.com>
 %% @copyright 2009 Leandro Silva.
 
-%% @doc helper module for http.
+%% @doc Helper module for http operations with httpc and mochiweb_request modules.
 
--module(http_helper_for_test).
+-module(http_helper).
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
 -export([http_post/2, http_get/1, http_put/2, http_delete/1]).
+-export([http_response/2, http_response/3, http_response/4]).
 
 %% External API
+
+%%
+%% HTTP Request functions
+%%
+%% These functions use httpc module.
+%%
 
 http_post(Uri, Body) ->
   http_request(post, Uri, Body).
@@ -21,6 +28,21 @@ http_put(Uri, Body) ->
 
 http_delete(Uri) ->
   http_request(delete, Uri).
+
+%%
+%% HTTP Response functions
+%%
+%% These functions use mochiweb_request module.
+%%
+  
+http_response(Request, Status) ->
+  Request:respond({Status, [], []}).
+  
+http_response(Request, Status, Body) ->
+  Request:respond({Status, [], Body}).
+  
+http_response(Request, Status, Headers, Body) ->
+  Request:respond({Status, Headers, Body}).
   
 %% Internal API
 

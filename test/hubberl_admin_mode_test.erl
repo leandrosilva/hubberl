@@ -6,7 +6,7 @@
 -module(hubberl_admin_mode_test).
 -author('Leandro Silva <leandrodoze@gmail.com>').
 
--import(http_helper_for_test, [http_post/2, http_get/1, http_put/2, http_delete/1]).
+-import(http_helper, [http_post/2, http_get/1, http_put/2, http_delete/1]).
 
 -include("records.hrl").
 
