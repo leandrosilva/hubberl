@@ -21,7 +21,7 @@ handle_request('POST', "/admin/destinations", Request, _DocRoot) ->
     created ->
       Name = struct:get_value(<<"name">>, Input),
 
-      http_response(Request, 201, [{"location", "/admin/destinations/" ++ Name}], [])
+      http_response(Request, 201, [{"Location", "/admin/destinations/" ++ Name}], [])
   end;
 
 handle_request('POST', _Path, Request, _DocRoot) ->
